@@ -2,12 +2,14 @@
 
 // Declare app level module which depends on views, and components
 angular.module('EERApp', [
-  'ngRoute',
-  'EERApp.view1',
-  'EERApp.view2'
+    'ngRoute',
+    'EERApp.home',
+    'EERApp.company'
 ]).
-config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
-  $locationProvider.hashPrefix('!');
-
-  $routeProvider.otherwise({redirectTo: '/view1'});
+config(['$routeProvider', function($routeProvider) {
+    $routeProvider
+        .when('/', {
+            templateUrl: 'home/home.html',
+            controller: 'HomeController'
+        });
 }]);
