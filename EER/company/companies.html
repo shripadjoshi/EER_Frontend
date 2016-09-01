@@ -14,9 +14,16 @@
 	<thead>
 	    <tr>
 	      <th>Name</th>
+	      <th>Website</th>
 	      <th>Address</th>
+	      <th>Country</th>
+	      <th>State</th>
+	      <th>City</th>
+	      <th>Pincode</th>
+	      <th>Phone No.</th>
+	      <th>Mobile No.</th>
 	      <th>Company Type</th>
-	      <th>Industry Type</th>
+	      <th>Industry Type</th>	      
 	      <th></th>
 	    </tr>
   	</thead>
@@ -29,9 +36,16 @@
 	<tbody>
 		<tr ng-repeat="company in companies" >
 			<td>{{company.name | capitalize}}</td>
+			<td>{{company.website}}</td>
 			<td>{{company.address}}</td>
+			<td>{{company.country}}</td>
+			<td>{{company.state}}</td>
+			<td>{{company.city}}</td>
+			<td>{{company.pincode}}</td>
+			<td>{{company.phone_no}}</td>
+			<td>{{company.mobile_no}}</td>
 			<td>{{company.companyType}}</td>
-			<td>{{company.industryType}}</td>		
+			<td>{{company.industryType}}</td>					
 			<td>
 				<a href="#/company/edit/{{company.id}}" class="btn btn-primary">Edit</a>
 				<a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteBrowser(company.id, company.name)">Delete</a>

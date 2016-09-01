@@ -1,0 +1,95 @@
+<fieldset>
+
+<div ng-if="isMsg" class="alert alert-success">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{message}}
+</div>
+
+<div ng-if="isErr" class="alert alert-danger">
+  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  {{errMessage}}
+</div>
+
+
+<div class="container">
+    <form id="create-company-form" class= "well form-horizontal" name="createCompany">
+    	<legend>Create Company</legend>
+        
+        <div class="form-group" ng-class="{'has-error':createCompany.name.$invalid && createCompany.name.$dirty}">
+        	<label class="col-md-4 control-label">Company Name</label>
+   			<div class="col-md-4 inputGroupContainer">
+  				<div class="input-group">
+	  				<input type="text" class="form-control" placeholder="Company" name="name" ng-model="createCompanyForm.name" ng-maxlength="200" required ng-blur="validateCompanyExist(createCompanyForm.name)">
+	            	<span class="help-block has-error" ng-if="createCompany.name.$dirty">
+	            		<span ng-show="createCompany.name.$error.required">Name is required.</span>
+	            		<span ng-show="createCompany.name.$error.maxlength">The name cannot be more than 200 characters.</span>
+	            		<span ng-show="isCompanyExist" class="help-block">Company is already taken.</span>
+	          		</span>
+    			</div>
+  			</div>
+  		</div>
+
+        <div class="form-group" ng-class="{'has-error':createCompany.website.$invalid && createCompany.website.$dirty}">
+        	<label class="col-md-4 control-label">Company Website</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<input type="text" class="form-control" placeholder="http://" name="website" ng-model="createCompanyForm.website" ng-maxlength="200" required ng-blur="validateCompanyWebsiteExist(createCompanyForm.website)" ng-change="validateCompanyWebsite(createCompanyForm.website)">
+            		<span class="help-block has-error" ng-if="createCompany.website.$dirty">
+			            <span ng-show="createCompany.website.$error.required">Company website is required.</span>
+			            <span ng-show="createCompany.website.$error.maxlength">The website cannot be more than 200 characters.</span>
+			            <span ng-show="isCompanyWebsiteExist" class="help-block">Company website is already taken.</span>
+			            <span ng-hide="isValidWebsite" class="help-block">Enter proper company website.</span>
+          			</span>
+    			</div>
+  			</div>
+  		</div>
+
+        <div class="form-group" ng-class="{'has-error':createCompany.address.$invalid && createCompany.address.$dirty}">
+        	<label class="col-md-4 control-label">Address</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<textarea class="form-control" placeholder="Address" name="address" ng-model="createCompanyForm.address" required ></textarea>
+            		<span class="help-block has-error" ng-if="createCompany.address.$dirty">
+            			<span ng-show="createCompany.address.$error.required">Address is required.</span>            
+          			</span>
+    			</div>
+  			</div>
+  		</div>
+
+        <div class="form-group" ng-class="{'has-error':createCompany.companyType.$invalid && createCompany.companyType.$dirty}">
+        	<label class="col-md-4 control-label">Company Type</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<input type="text" class="form-control" placeholder="Private or Public etc." name="companyType" ng-model="createCompanyForm.companyType" required >
+            		<span class="help-block has-error" ng-if="createCompany.companyType.$dirty">
+            			<span ng-show="createCompany.companyType.$error.required">Company type is required.</span>            
+          			</span>
+    			</div>
+  			</div>          
+        </div>
+
+        <div class="form-group" ng-class="{'has-error':createCompany.industryType.$invalid && createCompany.industryType.$dirty}">
+        	<label class="col-md-4 control-label">Industry Type</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<input type="text" class="form-control" placeholder="Software or Hardware etc." name="industryType" ng-model="createCompanyForm.industryType" required >
+            		<span class="help-block has-error" ng-if="createCompany.industryType.$dirty">
+            			<span ng-show="createCompany.industryType.$error.required">Industry type is required.</span>     
+          			</span>
+    			</div>
+  			</div>          
+        </div>
+
+        <div class="form-group">
+  			<label class="col-md-4 control-label"></label>
+  			<div class="col-md-4">
+  				<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="createCompany.$invalid || isCompanyExist || isCompanyWebsiteExist || !isValidWebsite" ng-click="createNewCompany()">
+	        		<span ng-hide="createCompanyForm.loading">Create Company <span class="glyphicon glyphicon-send"></span></span>
+	        		<span class="overlord-loading-spinner fa fa-spinner" ng-show="createCompanyForm.loading" > <span class="glyphicon glyphicon-send"></span></span>
+	        		<span ng-show="createCompanyForm.loading">Preparing your new company...<span class="glyphicon glyphicon-send"></span></span>
+      			</button>
+  			</div>
+		</div>
+	</form>
+</div>
+</fieldset> 
