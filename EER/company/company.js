@@ -7,18 +7,18 @@ angular.module('EERApp.company', ['ngRoute'])
         get: function() {
             return $http.get('http://localhost:1337/company');
         },
-        /*getBrowser: function(browserId) {
-            return $http.get('http://localhost:1337/browser/' + browserId);
+        getCompany: function(companyId) {
+            return $http.get('http://localhost:1337/company/' + companyId);
         },
-        updateBrowser: function(browserId, name) {
+        /*updateBrowser: function(browserId, name) {
             return $http.put('http://localhost:1337/browser/' + browserId, { name: name })
+        },*/
+        deleteCompany: function(companyId) {
+            return $http.delete('http://localhost:1337/company/' + companyId)
         },
-        deleteBrowser: function(browserId) {
-            return $http.delete('http://localhost:1337/browser/' + browserId)
-        },
-        createNewBrowser: function(name) {
-            return $http.post('http://localhost:1337/browser', { name: name })
-        }*/
+        createNewCompany: function(companyObj) {
+            return $http.post('http://localhost:1337/company', companyObj)
+        }
     }
 }])
 
@@ -29,7 +29,10 @@ angular.module('EERApp.company', ['ngRoute'])
   }).when('/company/new',{
   	templateUrl: 'company/new.html',
     controller: 'CompanyController'
-  });
+  }).when('/company/edit/:id', {
+        templateUrl: 'company/edit.html',
+        controller: 'CompanyController'
+   });
 }])
 
 .controller('CompanyController', ['$rootScope', '$scope', '$routeParams', 'CompanyDetails', '$filter',
@@ -50,6 +53,7 @@ angular.module('EERApp.company', ['ngRoute'])
     };
     $scope.allCompanies = "";
     $scope.allWebsites = "";
+    $scope.selectedCompany = "";
     $scope.urlRegex = new RegExp(
             "^" +
             // protocol identifier
@@ -127,7 +131,20 @@ angular.module('EERApp.company', ['ngRoute'])
             $scope.isMsg = false;
             $scope.errMessage = err.message;
             $scope.isErr = true;
-        });
+    });
+
+    //This method will be used to fill up the edit form
+    if ($routeParams.id != undefined) {
+        CompanyDetails.getCompany($routeParams.id)
+            .success(function(companyData) {
+                $scope.selectedCompany = companyData;
+            }).error(function(err) {
+                $scope.message = "";
+                $scope.isMsg = false;
+                $scope.errMessage = err.message;
+                $scope.isErr = true;
+            });
+    }
 
     $scope.validateCompanyExist = function(companyName){
 		if ($scope.allCompanies.indexOf(companyName) > -1) {
@@ -151,8 +168,65 @@ angular.module('EERApp.company', ['ngRoute'])
         } else {
             $scope.isValidWebsite = false;
         }
+    },
+
+    $scope.createNewCompany = function(){
+    	$scope.companyForm.loading = true;
+    	console.log($scope.createCompanyForm)
+    	var formData = {
+    		name: $scope.createCompanyForm.name,
+    		website: $scope.createCompanyForm.website,
+    		address: $scope.createCompanyForm.address,
+    		country: $scope.createCompanyForm.country,
+    		state: $scope.createCompanyForm.state,
+    		city: $scope.createCompanyForm.city,
+    		pincode: parseInt($scope.createCompanyForm.pincode),
+    		phone_no: parseInt($scope.createCompanyForm.phone_no),
+    		mobile_no: parseInt($scope.createCompanyForm.mobile_no),
+    		companyType: $scope.createCompanyForm.companyType,
+    		industryType: $scope.createCompanyForm.industryType
+    	};
+    	CompanyDetails.createNewCompany(formData)
+            .success(function(data) {
+                $scope.isMsg = true;
+                $scope.message = $filter('capitalize')(formData.name) + " company successfully created";
+                $scope.createCompanyForm = "";
+                $scope.errMessage = "";
+                $scope.isErr = false;
+            }).error(function(err) {
+                $scope.message = "";
+                $scope.isMsg = false;
+                $scope.errMessage = err.message;
+                $scope.isErr = true;
+            });
+    },
+
+    $scope.deleteCompany = function(companyId, name) {
+        CompanyDetails.deleteCompany(companyId)
+            .success(function(data) {
+                CompanyDetails.get()
+                    .success(function(data) {
+                        $scope.companies = data;
+                        $scope.isMsg = true;
+                        $scope.message = $filter('capitalize')(name) + " company successfully deleted";
+                    }).error(function(err) {
+                        $scope.message = "";
+                        $scope.isMsg = false;
+                        $scope.errMessage = err.message;
+                        $scope.isErr = true;
+                    });
+            }).error(function(data) {
+                $scope.message = "";
+                $scope.isMsg = false;
+                $scope.errMessage = err.message;
+                $scope.isErr = true;
+            });
+
     }
 
     
+
+
+
 
 }]);
