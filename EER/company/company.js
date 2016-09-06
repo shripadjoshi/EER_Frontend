@@ -10,9 +10,9 @@ angular.module('EERApp.company', ['ngRoute'])
         getCompany: function(companyId) {
             return $http.get('http://localhost:1337/company/' + companyId);
         },
-        /*updateBrowser: function(browserId, name) {
-            return $http.put('http://localhost:1337/browser/' + browserId, { name: name })
-        },*/
+        updateCompany: function(companyId, companyObj) {
+            return $http.put('http://localhost:1337/company/' + companyId, companyObj)
+        },
         deleteCompany: function(companyId) {
             return $http.delete('http://localhost:1337/company/' + companyId)
         },
@@ -138,11 +138,13 @@ angular.module('EERApp.company', ['ngRoute'])
         CompanyDetails.getCompany($routeParams.id)
             .success(function(companyData) {
                 $scope.selectedCompany = companyData;
+                $scope.isValidWebsite = true;
             }).error(function(err) {
                 $scope.message = "";
                 $scope.isMsg = false;
                 $scope.errMessage = err.message;
                 $scope.isErr = true;
+                $scope.isValidWebsite = false;
             });
     }
 
@@ -222,11 +224,37 @@ angular.module('EERApp.company', ['ngRoute'])
                 $scope.isErr = true;
             });
 
+    },
+
+    $scope.editCompanyDetails = function(companyId){
+        $scope.companyForm.loading = true;
+        CompanyDetails.updateCompany(companyId, $scope.selectedCompany)
+            .success(function(data) {
+                $scope.isMsg = true;
+                $scope.message = $filter('capitalize')($scope.selectedCompany.name) + " company successfully updated";
+                $scope.companyForm.loading = false;                
+                CompanyDetails.get()
+                    .success(function(data) {
+			            $scope.companies = data;
+			            var allComps = [];
+			            var allWebs = [];
+			            angular.forEach($scope.companies, function(obj) {
+			                allComps.push(obj.name);
+			                allWebs.push(obj.website);
+			            });
+			            $scope.allCompanies = allComps;
+			            $scope.allWebsites = allWebs;
+			        }).error(function(err) {
+			            $scope.message = "";
+			            $scope.isMsg = false;
+			            $scope.errMessage = err.message;
+			            $scope.isErr = true;
+                    })
+            }).error(function(err) {
+                $scope.message = "";
+                $scope.isMsg = false;
+                $scope.errMessage = err.message;
+                $scope.isErr = true;
+            });
     }
-
-    
-
-
-
-
 }]);

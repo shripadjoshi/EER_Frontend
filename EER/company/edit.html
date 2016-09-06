@@ -166,10 +166,10 @@
         <div class="form-group">
   			<label class="col-md-4 control-label"></label>
   			<div class="col-md-4">
-  				<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editCompany.$invalid || isCompanyExist || isCompanyWebsiteExist || !isValidWebsite" ng-click="createNewCompany()">
-	        		<span ng-hide="editCompanyForm.loading">Update Company <span class="glyphicon glyphicon-send"></span></span>
-	        		<span class="overlord-loading-spinner fa fa-spinner" ng-show="editCompanyForm.loading" > <span class="glyphicon glyphicon-send"></span></span>
-	        		<span ng-show="editCompanyForm.loading">Editing your company...<span class="glyphicon glyphicon-send"></span></span>
+  				<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editCompany.$invalid || isCompanyExist || isCompanyWebsiteExist || !isValidWebsite" ng-click="editCompanyDetails(selectedCompany.id)">
+	        		<span ng-hide="companyForm.loading">Update Company <span class="glyphicon glyphicon-send"></span></span>
+	        		<span class="overlord-loading-spinner fa fa-spinner" ng-show="companyForm.loading" > <span class="glyphicon glyphicon-send"></span></span>
+	        		<span ng-show="companyForm.loading">Editing your company...<span class="glyphicon glyphicon-send"></span></span>
       			</button>
       			<a href="#/companies" class="btn btn-primary btn-lg btn-block">Back</a>
   			</div>
