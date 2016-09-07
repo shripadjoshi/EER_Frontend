@@ -5,7 +5,8 @@ angular.module('EERApp', [
     'ngRoute',
     'datatables',
     'EERApp.home',
-    'EERApp.company'
+    'EERApp.company',
+    'EERApp.department'
 ])
 
 .filter('capitalize', function() {
@@ -19,6 +20,13 @@ angular.module('EERApp', [
     }
 
 })
+
+.filter('toLowerCase', function(){
+    return function(input, optional1, optional2) {
+        return ((angular.lowercase(input)))
+    }
+})
+
 .config(['$routeProvider', function($routeProvider) {
     $routeProvider
         .when('/', {

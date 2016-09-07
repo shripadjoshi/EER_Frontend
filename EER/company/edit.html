@@ -1,19 +1,16 @@
 <fieldset>
-
-<div ng-if="isMsg" class="alert alert-success">
-  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  {{message}}
-</div>
-
-<div ng-if="isErr" class="alert alert-danger">
-  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  {{errMessage}}
-</div>
-
-
 <div class="container">
-    <form id="edit-company-form" class= "well form-horizontal" name="editCompany">
-    	<legend>Edit Company</legend>
+  <div ng-if="isMsg" class="alert alert-success">
+    <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{message}}
+  </div>
+
+  <div ng-if="isErr" class="alert alert-danger">
+    <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{errMessage}}
+  </div>
+  <form id="edit-company-form" class= "well form-horizontal" name="editCompany">
+    <legend>Edit Company</legend>
         
         <div class="form-group" ng-class="{'has-error':editCompany.name.$invalid && editCompany.name.$dirty}">
         	<label class="col-md-4 control-label">Company Name</label>

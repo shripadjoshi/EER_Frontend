@@ -1,55 +1,68 @@
-<h1>Companies</h1>
-<div ng-if="isMsg" class="alert alert-info">
-  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  {{message}}
+<div class="container">
+	<h1>Companies</h1>
+	<div ng-if="isMsg" class="alert alert-info">
+	  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	  {{message}}
+	</div>
+
+	<div ng-if="isErr" class="alert alert-danger">
+	  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	  {{errMessage}}
+	</div>
+
+	<a href="#/company/new">Create new company</a>
+	<table id="companies" cellspacing="0" width="100%" datatable="ng" class="row-border hover">
+		<thead>
+		    <tr>
+		      <th>Name</th>
+		      <th>Website</th>
+		      <th>Company Type</th>
+		      <th>Industry Type</th>	      
+		      <th></th>
+		    </tr>
+	  	</thead>
+	  	<!--<tfoot>
+		    <tr>
+		      <th>Name</th>
+		      <th></th>
+		    </tr>
+	  	</tfoot>-->
+		<tbody>
+			<tr ng-repeat="company in companies" >
+				<td>{{company.name | capitalize}}</td>
+				<td>{{company.website}}</td>
+				<td>{{company.companyType}}</td>
+				<td>{{company.industryType}}</td>					
+				<td>
+					<a href="javascript:void(0)" class="btn btn-success" data-toggle="modal" data-target="#{{company.id}}">Other Information</a>
+					<a href="#/company/edit/{{company.id}}" class="btn btn-primary">Edit</a>
+					<a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteCompany(company.id, company.name)">Delete</a>
+				</td>
+			</tr>			
+		</tbody>
+	</table>
+	
+	<!-- Modal window -->
+	<div ng-repeat="company in companies" id="{{company.id}}" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+
+	    <!-- Modal content-->
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	        <h4 class="modal-title">Company details</h4>
+	      </div>
+	      <div class="modal-body">
+	        <p>{{company.name | capitalize}}</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+
+	  </div>
+	</div>
+
 </div>
 
-<div ng-if="isErr" class="alert alert-danger">
-  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  {{errMessage}}
-</div>
 
-<a href="#/company/new">Create new company</a>
-<table id="companies" cellspacing="0" width="100%" datatable="ng" class="row-border hover">
-	<thead>
-	    <tr>
-	      <th>Name</th>
-	      <th>Website</th>
-	      <th>Address</th>
-	      <th>Country</th>
-	      <th>State</th>
-	      <th>City</th>
-	      <th>Pincode</th>
-	      <th>Phone No.</th>
-	      <th>Mobile No.</th>
-	      <th>Company Type</th>
-	      <th>Industry Type</th>	      
-	      <th></th>
-	    </tr>
-  	</thead>
-  	<!--<tfoot>
-	    <tr>
-	      <th>Name</th>
-	      <th></th>
-	    </tr>
-  	</tfoot>-->
-	<tbody>
-		<tr ng-repeat="company in companies" >
-			<td>{{company.name | capitalize}}</td>
-			<td>{{company.website}}</td>
-			<td>{{company.address}}</td>
-			<td>{{company.country}}</td>
-			<td>{{company.state}}</td>
-			<td>{{company.city}}</td>
-			<td>{{company.pincode}}</td>
-			<td>{{company.phone_no}}</td>
-			<td>{{company.mobile_no}}</td>
-			<td>{{company.companyType}}</td>
-			<td>{{company.industryType}}</td>					
-			<td>
-				<a href="#/company/edit/{{company.id}}" class="btn btn-primary">Edit</a>
-				<a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteCompany(company.id, company.name)">Delete</a>
-			</td>
-		</tr>			
-	</tbody>
-</table>

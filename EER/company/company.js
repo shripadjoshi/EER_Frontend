@@ -121,8 +121,8 @@ angular.module('EERApp.company', ['ngRoute'])
             var allComps = [];
             var allWebs = [];
             angular.forEach($scope.companies, function(obj) {
-                allComps.push(obj.name);
-                allWebs.push(obj.website);
+                allComps.push($filter('toLowerCase')(obj.name));
+                allWebs.push($filter('toLowerCase')(obj.website));
             });
             $scope.allCompanies = allComps;
             $scope.allWebsites = allWebs;
@@ -149,7 +149,7 @@ angular.module('EERApp.company', ['ngRoute'])
     }
 
     $scope.validateCompanyExist = function(companyName){
-		if ($scope.allCompanies.indexOf(companyName) > -1) {
+		if ($scope.allCompanies.indexOf($filter('toLowerCase')(companyName)) > -1) {
 	        $scope.isCompanyExist = true;
 	    } else {
 	        $scope.isCompanyExist = false;
@@ -157,7 +157,7 @@ angular.module('EERApp.company', ['ngRoute'])
     },
 
     $scope.validateCompanyWebsiteExist = function(companyWebsite){
-		if ($scope.allWebsites.indexOf(companyWebsite) > -1) {
+		if ($scope.allWebsites.indexOf($filter('toLowerCase')(companyWebsite)) > -1) {
 	        $scope.isCompanyWebsiteExist = true;
 	    } else {
 	        $scope.isCompanyWebsiteExist = false;
