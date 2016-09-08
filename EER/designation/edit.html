@@ -1,0 +1,78 @@
+<fieldset>
+
+<div class="container">
+    <div ng-if="isMsg" class="alert alert-success">
+      <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      {{message}}
+    </div>
+
+    <div ng-if="isErr" class="alert alert-danger">
+      <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      {{errMessage}}
+    </div>
+    <form id="edit-department-form" class= "well form-horizontal" name="editDepartment">
+    	<legend>Edit Department</legend>
+        
+        <div class="form-group" ng-class="{'has-error':editDepartment.name.$invalid && editDepartment.name.$dirty}">
+          <label class="col-md-4 control-label">Department Name</label>
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Department" name="name" ng-model="selectedDepartment.name" ng-maxlength="200" required ng-blur="validateDepartmentExist(selectedDepartment.name)">
+                  <span class="help-block has-error" ng-if="editDepartment.name.$dirty">
+                    <span ng-show="editDepartment.name.$error.required">Name is required.</span>
+                    <span ng-show="editDepartment.name.$error.maxlength">The name cannot be more than 200 characters.</span>
+                    <span ng-show="isDepartmentExist" class="help-block">Department is already taken.</span>
+                  </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error':editDepartment.purpose.$invalid && editDepartment.purpose.$dirty}">
+          <label class="col-md-4 control-label">Purpose of department</label>
+          <div class="col-md-4 inputGroupContainer">
+              <div class="input-group">
+               <input type="text" class="form-control" placeholder="Purpose" name="purpose" ng-model="selectedDepartment.purpose" ng-maxlength="200" required>
+                <span class="help-block has-error" ng-if="editDepartment.purpose.$dirty">
+                  <span ng-show="editDepartment.purpose.$error.required">Department purpose is required.</span>
+                  <span ng-show="editDepartment.purpose.$error.maxlength">The purpose cannot be more than 200 characters.</span>
+                </span>
+             </div>
+         </div>
+        </div>
+
+
+        <div class="form-group" ng-class="{'has-error':editDepartment.company.$invalid && editDepartment.company.$dirty}">
+          <label class="col-md-4 control-label">Company</label>
+          <div class="col-md-4 inputGroupContainer">
+              <div class="input-group">
+               <select class="form-control" ng-model="selectedDepartment.company.id" ng-options="company.id as company.name for company in companies" required> </select>
+                <span class="help-block has-error" ng-if="editCompany.company.$dirty">
+                  <span ng-show="editDepartment.company.$error.required">Department company is required.</span>
+                </span>
+             </div>
+         </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error':editDepartment.location.$invalid && editDepartment.location.$dirty}">
+          <label class="col-md-4 control-label">Location</label>
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Location in the company" name="location" ng-model="selectedDepartment.location">
+          </div>
+        </div>
+      </div>
+
+        <div class="form-group">
+    			<label class="col-md-4 control-label"></label>
+    			<div class="col-md-4">
+    				<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editDepartment.$invalid || isDepartmentExist" ng-click="editDepartmentDetails(selectedDepartment.id)">
+  	        		<span ng-hide="departmentForm.loading">Update Department <span class="glyphicon glyphicon-send"></span></span>
+  	        		<span class="overlord-loading-spinner fa fa-spinner" ng-show="departmentForm.loading" > <span class="glyphicon glyphicon-send"></span></span>
+  	        		<span ng-show="departmentForm.loading">Editing your department...<span class="glyphicon glyphicon-send"></span></span>
+        			</button>
+        			<a href="#/departments" class="btn btn-primary btn-lg btn-block">Back</a>
+    			</div>
+		    </div>
+	</form>
+</div>
+</fieldset> 

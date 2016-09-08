@@ -1,0 +1,44 @@
+<div class="container">
+	<h1>Designations</h1>
+	<div ng-if="isMsg" class="alert alert-info">
+	  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	  {{message}}
+	</div>
+
+	<div ng-if="isErr" class="alert alert-danger">
+	  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	  {{errMessage}}
+	</div>
+
+	<a href="#/designation/new">Create new designation</a>
+	<table id="designations" cellspacing="0" width="100%" datatable="ng" class="row-border hover">
+		<thead>
+		    <tr>
+		      <th>Name</th>
+		      <th>Profile</th>
+		      <th>Company</th>
+		      <th>Department</th>		      	      	      
+		      <th></th>
+		    </tr>
+	  	</thead>
+	  	<!--<tfoot>
+		    <tr>
+		      <th>Name</th>
+		      <th></th>
+		    </tr>
+	  	</tfoot>-->
+		<tbody>
+			<tr ng-repeat="designation in designations" >
+				<td>{{designation.name | capitalize}}</td>
+				<td>{{designation.profile}}</td>
+				<td>{{designation.company.name | capitalize}}</td>
+				<td>{{designation.department.name | capitalize}}</td>
+											
+				<td>
+					<a href="#/designation/edit/{{designation.id}}" class="btn btn-primary">Edit</a>
+					<a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteDesignation(designation.id, designation.name)">Delete</a>
+				</td>
+			</tr>			
+		</tbody>
+	</table>
+</div>

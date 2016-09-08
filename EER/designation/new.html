@@ -1,0 +1,84 @@
+<fieldset>
+
+<div class="container">
+    <div ng-if="isMsg" class="alert alert-success">
+      <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      {{message}}
+    </div>
+
+    <div ng-if="isErr" class="alert alert-danger">
+      <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      {{errMessage}}
+    </div>
+    <form id="create-designation-form" class= "well form-horizontal" name="createDesignation">
+    	<legend>Create Designation</legend>
+        
+        <div class="form-group" ng-class="{'has-error':createDesignation.name.$invalid && createDesignation.name.$dirty}">
+        	<label class="col-md-4 control-label">Designation Name</label>
+     			<div class="col-md-4 inputGroupContainer">
+    				<div class="input-group">
+  	  				<input type="text" class="form-control" placeholder="Designation" name="name" ng-model="createDesignationForm.name" ng-maxlength="200" required ng-blur="validateDesignationExist(createDesignationForm.name, createDesignationForm.company, createDesignationForm.department)">
+  	            	<span class="help-block has-error" ng-if="createDesignation.name.$dirty">
+  	            		<span ng-show="createDesignation.name.$error.required">Name is required.</span>
+  	            		<span ng-show="createDesignation.name.$error.maxlength">The name cannot be more than 200 characters.</span>
+  	            		<span ng-show="isDesignationExist" class="help-block">Designation, company and department combination is already taken.</span>
+  	          		</span>
+      			</div>
+    			</div>
+  		  </div>
+
+        <div class="form-group" ng-class="{'has-error':createDesignation.purpose.$invalid && createDesignation.purpose.$dirty}">
+        	<label class="col-md-4 control-label">Profile of designation</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		  <div class="input-group">
+        			 <input type="text" class="form-control" placeholder="Profile" name="profile" ng-model="createDesignationForm.profile" ng-maxlength="200">
+            		<span class="help-block has-error" ng-if="createDesignation.profile.$dirty">
+                  <span ng-show="createDesignation.profile.$error.maxlength">The profile cannot be more than 200 characters.</span>
+          			</span>
+    			   </div>
+  			 </div>
+  		  </div>
+
+        <div class="form-group" ng-class="{'has-error':createDesignation.company.$invalid && createDesignation.company.$dirty}">
+          <label class="col-md-4 control-label">Company</label>
+          <div class="col-md-4 inputGroupContainer">
+              <div class="input-group">
+               <select class="form-control" ng-model="createDesignationForm.company" ng-options="company.id as company.name for company in companies" ng-change="fetchCompanyDepartments(); validateDesignationExist(createDesignationForm.name, createDesignationForm.company, createDesignationForm.department)" required>
+                    <option value="">Select company</option>
+                </select>
+
+                <span class="help-block has-error" ng-if="createCompany.company.$dirty">
+                  <span ng-show="createDesignation.company.$error.required">Designation company is required.</span>
+                </span>
+             </div>
+         </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error':createDesignation.department.$invalid && createDesignation.department.$dirty}">
+          <label class="col-md-4 control-label">Department</label>
+          <div class="col-md-4 inputGroupContainer">
+              <div class="input-group">
+               <select class="form-control" ng-model="createDesignationForm.department" ng-options="department.id as department.name for department in companyDepartments" ng-change="validateDesignationExist(createDesignationForm.name, createDesignationForm.company, createDesignationForm.department)" required>
+                    <option value="">Select department</option>
+                </select>
+                <span class="help-block has-error" ng-if="createCompany.department.$dirty">
+                  <span ng-show="createDesignation.department.$error.required">Designation department is required.</span>
+                </span>
+             </div>
+         </div>
+        </div>
+  		
+        <div class="form-group">
+  			<label class="col-md-4 control-label"></label>
+  			<div class="col-md-4">
+  				<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="createDesignation.$invalid || isDesignationExist" ng-click="createNewDesignation()">
+	        		<span ng-hide="createDesignationForm.loading">Create Designation <span class="glyphicon glyphicon-send"></span></span>
+	        		<span class="overlord-loading-spinner fa fa-spinner" ng-show="createDesignationForm.loading" > <span class="glyphicon glyphicon-send"></span></span>
+	        		<span ng-show="createDesignationForm.loading">Preparing your new designation...<span class="glyphicon glyphicon-send"></span></span>
+      			</button>
+      			<a href="#/designations" class="btn btn-primary btn-lg btn-block">Back</a>
+  			</div>
+		</div>
+	</form>
+</div>
+</fieldset> 
