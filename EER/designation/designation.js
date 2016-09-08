@@ -98,19 +98,14 @@ angular.module('EERApp.designation', ['ngRoute'])
     }
 
     $scope.validateDesignationExist = function(designationName, companyId, departmentId){
-        angular.forEach($scope.allDesignations, function(obj) {
-            //allDesi.push([$filter('toLowerCase')(obj.name), obj.company.id, obj.department.id]);
-            if ((obj[0].indexOf($filter('toLowerCase')(designationName)) > -1) && (obj[1] == companyId) && (obj[2] == departmentId)) {
+        for(var i=0; i< $scope.allDesignations.length; i++){
+            if (($scope.allDesignations[i][0].indexOf($filter('toLowerCase')(designationName)) > -1) && ($scope.allDesignations[i][1] == companyId) && ($scope.allDesignations[i][2] == departmentId)) {
                 $scope.isDesignationExist = true;
-                console.log($scope.allDesignations);
-                console.log($scope.isDesignationExist);
                 return;
             } else {
-                if(!$scope.isDesignationExist)
-                    $scope.isDesignationExist = false;
-                console.log("asdad")
+                $scope.isDesignationExist = false;
             }
-        });
+        }
 		
     },
 
