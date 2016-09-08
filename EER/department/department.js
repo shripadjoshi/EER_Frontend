@@ -38,7 +38,8 @@ angular.module('EERApp.department', ['ngRoute'])
 .controller('DepartmentController', ['$rootScope', '$scope', '$routeParams', 'DepartmentDetails', 'CompanyDetails', '$filter',
 	function($rootScope, $scope, $routeParams, DepartmentDetails, CompanyDetails, $filter) {
 	//This rootScope variable will set the active tab in the menu item
-	$rootScope.activeTab = "Department";
+    $rootScope.activeTab = "Department";
+	$rootScope.activeTabMaster = "Master";
     $scope.departments = "";
 	$scope.companies = "";
     $scope.message = "";

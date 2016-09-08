@@ -6,7 +6,8 @@ angular.module('EERApp', [
     'datatables',
     'EERApp.home',
     'EERApp.company',
-    'EERApp.department'
+    'EERApp.department',
+    'EERApp.designation'
 ])
 
 .filter('capitalize', function() {
