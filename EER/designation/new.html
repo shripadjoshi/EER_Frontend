@@ -43,7 +43,7 @@
           <label class="col-md-4 control-label">Company</label>
           <div class="col-md-4 inputGroupContainer">
               <div class="input-group">
-               <select class="form-control" ng-model="createDesignationForm.company" ng-options="company.id as company.name for company in companies" ng-change="fetchCompanyDepartments(); validateDesignationExist(createDesignationForm.name, createDesignationForm.company, createDesignationForm.department)" required>
+               <select class="form-control" ng-model="createDesignationForm.company" ng-options="company.id as company.name for company in companies" ng-change="fetchCompanyDepartments('create'); validateDesignationExist(createDesignationForm.name, createDesignationForm.company, createDesignationForm.department)" required>
                     <option value="">Select company</option>
                 </select>
 

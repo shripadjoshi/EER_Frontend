@@ -89,6 +89,17 @@ angular.module('EERApp.designation', ['ngRoute'])
             .success(function(designationData) {
                 $scope.selectedDesignation = designationData;
                 $scope.isDesignationExist = true;
+                if($scope.selectedDesignation.company.id > 0){
+                    CompanyDetails.getCompany($scope.selectedDesignation.company.id)
+                    .success(function(companyData) {
+                        $scope.companyDepartments = companyData.departments;                
+                    }).error(function(err) {
+                        $scope.message = "";
+                        $scope.isMsg = false;
+                        $scope.errMessage = err.message;
+                        $scope.isErr = true;
+                    });
+                }
             }).error(function(err) {
                 $scope.message = "";
                 $scope.isMsg = false;
@@ -153,9 +164,9 @@ angular.module('EERApp.designation', ['ngRoute'])
         $scope.designationForm.loading = true;
         var editFormData = {
             name: $scope.selectedDesignation.name,
-            purpose: $scope.selectedDesignation.purpose,
-            location: $scope.selectedDesignation.location,
-            company: $scope.selectedDesignation.company.id
+            profile: $scope.selectedDesignation.profile,
+            company: $scope.selectedDesignation.company.id,
+            department: $scope.selectedDesignation.department.id,
         }
         DesignationDetails.updateDesignation(designationId, editFormData)
             .success(function(data) {
@@ -165,14 +176,11 @@ angular.module('EERApp.designation', ['ngRoute'])
                 DesignationDetails.get()
                     .success(function(data) {
 			            $scope.designations = data;
-			            var allComps = [];
-			            var allWebs = [];
-			            angular.forEach($scope.designations, function(obj) {
-			                allComps.push(obj.name);
-			                allWebs.push(obj.website);
-			            });
-			            $scope.allDesignations = allComps;
-			            $scope.allWebsites = allWebs;
+			            var allDesi = [];
+                        angular.forEach($scope.designations, function(obj) {
+                            allDesi.push([$filter('toLowerCase')(obj.name), obj.company.id, obj.department.id]);
+                        });
+                        $scope.allDesignations = allDesi;  
 			        }).error(function(err) {
 			            $scope.message = "";
 			            $scope.isMsg = false;
@@ -187,9 +195,16 @@ angular.module('EERApp.designation', ['ngRoute'])
             });
     },
 
-    $scope.fetchCompanyDepartments = function(){
-        if($scope.createDesignationForm.company > 0){
-            CompanyDetails.getCompany($scope.createDesignationForm.company)
+    $scope.fetchCompanyDepartments = function(formName){
+        var company = "";
+        if(formName == "create"){
+            company = $scope.createDesignationForm.company
+
+        }else{
+            company = $scope.selectedDesignation.company.id
+        }
+        if(company > 0){
+            CompanyDetails.getCompany(company)
             .success(function(companyData) {
                 $scope.companyDepartments = companyData.departments;                
             }).error(function(err) {

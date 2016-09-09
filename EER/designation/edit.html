@@ -10,67 +10,73 @@
       <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
       {{errMessage}}
     </div>
-    <form id="edit-department-form" class= "well form-horizontal" name="editDepartment">
-    	<legend>Edit Department</legend>
+    <form id="edit-designation-form" class= "well form-horizontal" name="editDesignation">
+    	<legend>Edit Designation</legend>
         
-        <div class="form-group" ng-class="{'has-error':editDepartment.name.$invalid && editDepartment.name.$dirty}">
-          <label class="col-md-4 control-label">Department Name</label>
+        <div class="form-group" ng-class="{'has-error':editDesignation.name.$invalid && editDesignation.name.$dirty}">
+          <label class="col-md-4 control-label">Designation Name</label>
           <div class="col-md-4 inputGroupContainer">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="Department" name="name" ng-model="selectedDepartment.name" ng-maxlength="200" required ng-blur="validateDepartmentExist(selectedDepartment.name)">
-                  <span class="help-block has-error" ng-if="editDepartment.name.$dirty">
-                    <span ng-show="editDepartment.name.$error.required">Name is required.</span>
-                    <span ng-show="editDepartment.name.$error.maxlength">The name cannot be more than 200 characters.</span>
-                    <span ng-show="isDepartmentExist" class="help-block">Department is already taken.</span>
+              <input type="text" class="form-control" placeholder="Designation" name="name" ng-model="selectedDesignation.name" ng-maxlength="200" required ng-blur="validateDesignationExist(selectedDesignation.name, selectedDesignation.company.id, selectedDesignation.department.id)">
+                  <span class="help-block has-error" ng-if="editDesignation.name.$dirty">
+                    <span ng-show="editDesignation.name.$error.required">Name is required.</span>
+                    <span ng-show="editDesignation.name.$error.maxlength">The name cannot be more than 200 characters.</span>
+                    <span ng-show="isDesignationExist" class="help-block">Designation, company and department combination is already taken.</span>
                   </span>
             </div>
           </div>
         </div>
 
-        <div class="form-group" ng-class="{'has-error':editDepartment.purpose.$invalid && editDepartment.purpose.$dirty}">
-          <label class="col-md-4 control-label">Purpose of department</label>
+        <div class="form-group" ng-class="{'has-error':editDesignation.profile.$invalid && editDesignation.profile.$dirty}">
+          <label class="col-md-4 control-label">Profile of designation</label>
           <div class="col-md-4 inputGroupContainer">
               <div class="input-group">
-               <input type="text" class="form-control" placeholder="Purpose" name="purpose" ng-model="selectedDepartment.purpose" ng-maxlength="200" required>
-                <span class="help-block has-error" ng-if="editDepartment.purpose.$dirty">
-                  <span ng-show="editDepartment.purpose.$error.required">Department purpose is required.</span>
-                  <span ng-show="editDepartment.purpose.$error.maxlength">The purpose cannot be more than 200 characters.</span>
+               <input type="text" class="form-control" placeholder="Profile" name="profile" ng-model="selectedDesignation.profile" ng-maxlength="200">
+                <span class="help-block has-error" ng-if="editDesignation.profile.$dirty">
+                  <span ng-show="editDesignation.profile.$error.maxlength">The profile cannot be more than 200 characters.</span>
                 </span>
              </div>
          </div>
         </div>
 
 
-        <div class="form-group" ng-class="{'has-error':editDepartment.company.$invalid && editDepartment.company.$dirty}">
+        <div class="form-group" ng-class="{'has-error':editDesignation.company.$invalid && editDesignation.company.$dirty}">
           <label class="col-md-4 control-label">Company</label>
           <div class="col-md-4 inputGroupContainer">
               <div class="input-group">
-               <select class="form-control" ng-model="selectedDepartment.company.id" ng-options="company.id as company.name for company in companies" required> </select>
+               <select class="form-control" ng-model="selectedDesignation.company.id" ng-options="company.id as company.name for company in companies" ng-change="fetchCompanyDepartments('edit'); validateDesignationExist(selectedDesignation.name, selectedDesignation.company.id, selectedDesignation.department.id)" required> </select>
                 <span class="help-block has-error" ng-if="editCompany.company.$dirty">
-                  <span ng-show="editDepartment.company.$error.required">Department company is required.</span>
+                  <span ng-show="editDesignation.company.$error.required">Designation company is required.</span>
                 </span>
              </div>
          </div>
         </div>
 
-        <div class="form-group" ng-class="{'has-error':editDepartment.location.$invalid && editDepartment.location.$dirty}">
-          <label class="col-md-4 control-label">Location</label>
+
+        <div class="form-group" ng-class="{'has-error':editDesignation.department.$invalid && editDesignation.department.$dirty}">
+          <label class="col-md-4 control-label">Department</label>
           <div class="col-md-4 inputGroupContainer">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Location in the company" name="location" ng-model="selectedDepartment.location">
-          </div>
+              <div class="input-group">
+               <select class="form-control" ng-model="selectedDesignation.department.id" ng-options="department.id as department.name for department in companyDepartments" ng-change="validateDesignationExist(selectedDesignation.name, selectedDesignation.company.id, selectedDesignation.department.id)" required>
+                    <option value="">Select department</option>
+                </select>
+                <span class="help-block has-error" ng-if="createCompany.department.$dirty">
+                  <span ng-show="editDesignation.department.$error.required">Designation department is required.</span>
+                </span>
+             </div>
+         </div>
         </div>
-      </div>
+
 
         <div class="form-group">
     			<label class="col-md-4 control-label"></label>
     			<div class="col-md-4">
-    				<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editDepartment.$invalid || isDepartmentExist" ng-click="editDepartmentDetails(selectedDepartment.id)">
-  	        		<span ng-hide="departmentForm.loading">Update Department <span class="glyphicon glyphicon-send"></span></span>
-  	        		<span class="overlord-loading-spinner fa fa-spinner" ng-show="departmentForm.loading" > <span class="glyphicon glyphicon-send"></span></span>
-  	        		<span ng-show="departmentForm.loading">Editing your department...<span class="glyphicon glyphicon-send"></span></span>
+    				<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editDesignation.$invalid || isDesignationExist" ng-click="editDesignationDetails(selectedDesignation.id)">
+  	        		<span ng-hide="designationForm.loading">Update Designation <span class="glyphicon glyphicon-send"></span></span>
+  	        		<span class="overlord-loading-spinner fa fa-spinner" ng-show="designationForm.loading" > <span class="glyphicon glyphicon-send"></span></span>
+  	        		<span ng-show="designationForm.loading">Editing your designation...<span class="glyphicon glyphicon-send"></span></span>
         			</button>
-        			<a href="#/departments" class="btn btn-primary btn-lg btn-block">Back</a>
+        			<a href="#/designations" class="btn btn-primary btn-lg btn-block">Back</a>
     			</div>
 		    </div>
 	</form>
