@@ -43,7 +43,7 @@
 	</table>
 	
 	<!-- Modal window -->
-	<div ng-repeat="company in companies" id="{{company.id}}" class="modal fade" role="dialog">
+	<div ng-repeat="company in companies" id="{{company.id}}" class="modal fade" role="dialog" >
 	  <div class="modal-dialog">
 
 	    <!-- Modal content-->
@@ -105,6 +105,10 @@
 				    <tr>
 				      <th>Associated Departments:</th>
 				      <td>{{company.departments | joinArrayValues}}</td>		      
+				    </tr>
+				    <tr>
+				      <th>Associated Designations:</th>
+				      <td>{{company.designations | joinArrayValues}}</td>		      
 				    </tr>
 			  	</thead>
 				<!--<tbody>

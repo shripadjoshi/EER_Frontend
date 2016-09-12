@@ -11,4 +11,5 @@ angular.module('EERApp.home', ['ngRoute'])
 
 .controller('HomeController', ['$rootScope', '$scope', '$routeParams',function($rootScope, $scope, $routeParams) {
 	$rootScope.activeTab = "Home";
+	$rootScope.activeTabMaster = "";
 }]);

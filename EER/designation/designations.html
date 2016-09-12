@@ -32,8 +32,7 @@
 				<td>{{designation.name | capitalize}}</td>
 				<td>{{designation.profile}}</td>
 				<td>{{designation.company.name | capitalize}}</td>
-				<td>{{designation.department.name | capitalize}}</td>
-											
+				<td>{{designation.department.name | capitalize}}</td>											
 				<td>
 					<a href="#/designation/edit/{{designation.id}}" class="btn btn-primary">Edit</a>
 					<a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteDesignation(designation.id, designation.name)">Delete</a>

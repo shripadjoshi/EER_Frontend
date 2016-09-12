@@ -39,6 +39,7 @@ angular.module('EERApp.company', ['ngRoute'])
 	function($rootScope, $scope, $routeParams, CompanyDetails, $filter) {
 	//This rootScope variable will set the active tab in the menu item
 	$rootScope.activeTab = "Company";
+    $rootScope.activeTabMaster = "";
 
 	$scope.companies = "";
     $scope.message = "";
