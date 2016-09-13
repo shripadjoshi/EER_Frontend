@@ -21,7 +21,7 @@
                     <option value="">Select salutation</option>
               </select>
               <span class="help-block has-error" ng-if="createEmployee.salutation.$dirty">
-                <span ng-show="createEmployee.name.$error.required">Salutation is required.</span>                
+                <span ng-show="createEmployee.salutation.$error.required">Salutation is required.</span>                
               </span>
             </div>
           </div>
@@ -64,152 +64,193 @@
             </div>
           </div>
         </div>
+        
+        <div class="form-group" ng-class="{'has-error':createEmployee.email_id.$invalid && createEmployee.email_id.$dirty}">
+          <label class="col-md-4 control-label">Email</label>
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <input type="email" class="form-control" placeholder="Email" name="email_id" ng-model="createEmployeeForm.email_id" ng-maxlength="50" required ng-blur="validateEmailExist(createEmployeeForm.email_id)">
+              <span class="help-block has-error" ng-if="createEmployee.email_id.$dirty">
+                <span ng-show="createEmployee.email_id.$error.required">Email id is required.</span>
+                <span ng-show="createEmployee.email_id.$error.email">This is not a valid email.</span>
+                <span ng-show="createEmployee.email_id.$error.maxlength">The email id cannot be more than 50 characters.</span>
+                <span ng-show="isEmployeeEmailExist" class="help-block">Email is already taken.</span>
+              </span>
+            </div>
+          </div>
+        </div>
+          
+        <div class="form-group" ng-class="{'has-error':createEmployee.address.$invalid && createEmployee.address.$dirty}">
+        	<label class="col-md-4 control-label">Address</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<textarea class="form-control" placeholder="Address" name="address" ng-model="createEmployeeForm.address" required ></textarea>
+            		<span class="help-block has-error" ng-if="createEmployee.address.$dirty">
+            			<span ng-show="createEmployee.address.$error.required">Address is required.</span>            
+          			</span>
+    			  </div>
+  			  </div>
+  		  </div>
 
-        <div class="form-group" ng-class="{'has-error':createCompany.pincode.$invalid && createCompany.emp_id.$dirty}">
-            <label class="col-md-4 control-label">emp_id</label>
-            <div class="col-md-4 inputGroupContainer">
-              <div class="input-group">
-                <input type="number" class="form-control" placeholder="411058" name="emp_id" ng-model="createCompanyForm.emp_id" required ng-maxlength="6" ng-minlength="6" ng-pattern="/^[0-9]+$/">
-                  <span class="help-block has-error" ng-if="createCompany.pincode.$dirty">
-                    <span ng-show="createCompany.pincode.$error.required">emp_id is required.</span>
-                    <span ng-show="createCompany.pincode.$error.maxlength">The emp_id cannot be more than 6 numbers.</span>
-                    <span ng-show="createCompany.pincode.$error.number">Not valid emp_id!</span>
-                    <span ng-show="createCompany.pincode.$error.minlength">The emp_id cannot be less than 6 numbers.</span>
-                    <span ng-show="createCompany.pincode.$error.pattern">The emp_id cannot be negative.</span>
-                  </span>
+        <div class="form-group" ng-class="{'has-error':createEmployee.landmark.$invalid && createEmployee.landmark.$dirty}">
+          <label class="col-md-4 control-label">Landmark</label>
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Landmark" name="landmark" ng-model="createEmployeeForm.landmark">                
             </div>
           </div>
         </div>
 
-          
-      <div class="form-group" ng-class="{'has-error':createCompany.address.$invalid && createCompany.address.$dirty}">
-      	<label class="col-md-4 control-label">Address</label>
-      	<div class="col-md-4 inputGroupContainer">
-      		<div class="input-group">
-      			<textarea class="form-control" placeholder="Address" name="address" ng-model="createCompanyForm.address" required ></textarea>
-          		<span class="help-block has-error" ng-if="createCompany.address.$dirty">
-          			<span ng-show="createCompany.address.$error.required">Address is required.</span>            
-        			</span>
-  			</div>
-			</div>
-		</div>
-
-    		<div class="form-group" ng-class="{'has-error':createCompany.country.$invalid && createCompany.country.$dirty}">
+    		<div class="form-group" ng-class="{'has-error':createEmployee.country.$invalid && createEmployee.country.$dirty}">
           	<label class="col-md-4 control-label">Country</label>
           	<div class="col-md-4 inputGroupContainer">
           		<div class="input-group">
-          			<input type="text" class="form-control" placeholder="e.g. India" name="country" ng-model="createCompanyForm.country" required >
-              		<span class="help-block has-error" ng-if="createCompany.country.$dirty">
-              			<span ng-show="createCompany.country.$error.required">Country is required.</span>            
+          			<input type="text" class="form-control" placeholder="e.g. India" name="country" ng-model="createEmployeeForm.country" required >
+              		<span class="help-block has-error" ng-if="createEmployee.country.$dirty">
+              			<span ng-show="createEmployee.country.$error.required">Country is required.</span>            
             			</span>
       			</div>
     			</div>
     		</div>
 
-    		<div class="form-group" ng-class="{'has-error':createCompany.state.$invalid && createCompany.state.$dirty}">
+    		<div class="form-group" ng-class="{'has-error':createEmployee.state.$invalid && createEmployee.state.$dirty}">
           	<label class="col-md-4 control-label">State</label>
           	<div class="col-md-4 inputGroupContainer">
           		<div class="input-group">
-          			<input type="text" class="form-control" placeholder="e.g. Maharashtra" name="state" ng-model="createCompanyForm.state" required >
-              		<span class="help-block has-error" ng-if="createCompany.state.$dirty">
-              			<span ng-show="createCompany.state.$error.required">State is required.</span>            
+          			<input type="text" class="form-control" placeholder="e.g. Maharashtra" name="state" ng-model="createEmployeeForm.state" required >
+              		<span class="help-block has-error" ng-if="createEmployee.state.$dirty">
+              			<span ng-show="createEmployee.state.$error.required">State is required.</span>            
             			</span>
       			</div>
     			</div>
     		</div>
 
-    		<div class="form-group" ng-class="{'has-error':createCompany.city.$invalid && createCompany.city.$dirty}">
+    		<div class="form-group" ng-class="{'has-error':createEmployee.city.$invalid && createEmployee.city.$dirty}">
           	<label class="col-md-4 control-label">City</label>
           	<div class="col-md-4 inputGroupContainer">
           		<div class="input-group">
-          			<input type="text" class="form-control" placeholder="e.g. Pune" name="city" ng-model="createCompanyForm.city" required >
-              		<span class="help-block has-error" ng-if="createCompany.city.$dirty">
-              			<span ng-show="createCompany.city.$error.required">City is required.</span>            
+          			<input type="text" class="form-control" placeholder="e.g. Pune" name="city" ng-model="createEmployeeForm.city" required >
+              		<span class="help-block has-error" ng-if="createEmployee.city.$dirty">
+              			<span ng-show="createEmployee.city.$error.required">City is required.</span>            
             			</span>
       			</div>
     			</div>
     		</div>
 
-    		<div class="form-group" ng-class="{'has-error':createCompany.pincode.$invalid && createCompany.pincode.$dirty}">
+    		<div class="form-group" ng-class="{'has-error':createEmployee.pincode.$invalid && createEmployee.pincode.$dirty}">
           	<label class="col-md-4 control-label">Pincode</label>
           	<div class="col-md-4 inputGroupContainer">
           		<div class="input-group">
-          			<input type="number" class="form-control" placeholder="411058" name="pincode" ng-model="createCompanyForm.pincode" required ng-maxlength="6" ng-minlength="6" ng-pattern="/^[0-9]+$/">
-              		<span class="help-block has-error" ng-if="createCompany.pincode.$dirty">
-              			<span ng-show="createCompany.pincode.$error.required">Pincode is required.</span>
-              			<span ng-show="createCompany.pincode.$error.maxlength">The pincode cannot be more than 6 numbers.</span>
-              			<span ng-show="createCompany.pincode.$error.number">Not valid pincode!</span>
-              			<span ng-show="createCompany.pincode.$error.minlength">The pincode cannot be less than 6 numbers.</span>
-              			<span ng-show="createCompany.pincode.$error.pattern">The pincode cannot be negative.</span>
+          			<input type="number" class="form-control" placeholder="411058" name="pincode" ng-model="createEmployeeForm.pincode" required ng-maxlength="6" ng-minlength="6" ng-pattern="/^[0-9]+$/">
+              		<span class="help-block has-error" ng-if="createEmployee.pincode.$dirty">
+              			<span ng-show="createEmployee.pincode.$error.required">Pincode is required.</span>
+              			<span ng-show="createEmployee.pincode.$error.maxlength">The pincode cannot be more than 6 numbers.</span>
+              			<span ng-show="createEmployee.pincode.$error.number">Not valid pincode!</span>
+              			<span ng-show="createEmployee.pincode.$error.minlength">The pincode cannot be less than 6 numbers.</span>
+              			<span ng-show="createEmployee.pincode.$error.pattern">The pincode cannot be negative.</span>
             			</span>
       			</div>
     			</div>
     		</div>
 
 
-    		<div class="form-group" ng-class="{'has-error':createCompany.phone_no.$invalid && createCompany.phone_no.$dirty}">
+    		<div class="form-group" ng-class="{'has-error':createEmployee.phone_no.$invalid && createEmployee.phone_no.$dirty}">
           	<label class="col-md-4 control-label">Phone no.</label>
           	<div class="col-md-4 inputGroupContainer">
           		<div class="input-group">
-          			<input type="number" class="form-control" placeholder="912448798" name="phone_no" ng-model="createCompanyForm.phone_no" required ng-pattern="/^[0-9]+$/">
-              		<span class="help-block has-error" ng-if="createCompany.phone_no.$dirty">
-              			<span ng-show="createCompany.phone_no.$error.required">Phone no. is required.</span>
-              			<span ng-show="createCompany.phone_no.$error.number">Not valid phone no!</span>
-              			<span ng-show="createCompany.phone_no.$error.pattern">The phone no cannot be negative.</span>        
+          			<input type="number" class="form-control" placeholder="912448798" name="phone_no" ng-model="createEmployeeForm.phone_no" required ng-pattern="/^[0-9]+$/">
+              		<span class="help-block has-error" ng-if="createEmployee.phone_no.$dirty">
+              			<span ng-show="createEmployee.phone_no.$error.required">Phone no. is required.</span>
+              			<span ng-show="createEmployee.phone_no.$error.number">Not valid phone no!</span>
+              			<span ng-show="createEmployee.phone_no.$error.pattern">The phone no cannot be negative.</span>        
             			</span>
       			</div>
     			</div>
     		</div>
 
-    		<div class="form-group" ng-class="{'has-error':createCompany.mobile_no.$invalid && createCompany.mobile_no.$dirty}">
-          	<label class="col-md-4 control-label">Mobile no.</label>
-          	<div class="col-md-4 inputGroupContainer">
-          		<div class="input-group">
-          			<input type="number" class="form-control" placeholder="9999988888" name="mobile_no" ng-model="createCompanyForm.mobile_no" required ng-maxlength="10" ng-minlength="10" ng-pattern="/^[0-9]+$/">
-              		<span class="help-block has-error" ng-if="createCompany.mobile_no.$dirty">
-              			<span ng-show="createCompany.mobile_no.$error.required">Mobile no. is required.</span>
-              			<span ng-show="createCompany.mobile_no.$error.maxlength">The mobile no cannot be more than 10 numbers.</span>
-              			<span ng-show="createCompany.mobile_no.$error.number">Not valid mobile no!</span>
-              			<span ng-show="createCompany.mobile_no.$error.minlength">The mobile no cannot be less than 10 numbers.</span>
-              			<span ng-show="createCompany.mobile_no.$error.pattern">The mobile no cannot be negative.</span>          
-            			</span>
+    		<div class="form-group" ng-class="{'has-error':createEmployee.mobile_no.$invalid && createEmployee.mobile_no.$dirty}">
+        	<label class="col-md-4 control-label">Mobile no.</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<input type="number" class="form-control" placeholder="9999988888" name="mobile_no" ng-model="createEmployeeForm.mobile_no" required ng-maxlength="10" ng-minlength="10" ng-pattern="/^[0-9]+$/">
+            		<span class="help-block has-error" ng-if="createEmployee.mobile_no.$dirty">
+            			<span ng-show="createEmployee.mobile_no.$error.required">Mobile no. is required.</span>
+            			<span ng-show="createEmployee.mobile_no.$error.maxlength">The mobile no cannot be more than 10 numbers.</span>
+            			<span ng-show="createEmployee.mobile_no.$error.number">Not valid mobile no!</span>
+            			<span ng-show="createEmployee.mobile_no.$error.minlength">The mobile no cannot be less than 10 numbers.</span>
+            			<span ng-show="createEmployee.mobile_no.$error.pattern">The mobile no cannot be negative.</span>          
+          			</span>
       			</div>
     			</div>
     		</div>
 
-          <div class="form-group" ng-class="{'has-error':createCompany.companyType.$invalid && createCompany.companyType.$dirty}">
-          	<label class="col-md-4 control-label">Company Type</label>
-          	<div class="col-md-4 inputGroupContainer">
-          		<div class="input-group">
-          			<input type="text" class="form-control" placeholder="Private or Public etc." name="companyType" ng-model="createCompanyForm.companyType" required >
-              		<span class="help-block has-error" ng-if="createCompany.companyType.$dirty">
-              			<span ng-show="createCompany.companyType.$error.required">Company type is required.</span>            
-            			</span>
-      			</div>
-    			</div>          
+        <div class="form-group" ng-class="{'has-error':createEmployee.employee_type.$invalid && createEmployee.employee_type.$dirty}">
+          <label class="col-md-4 control-label">Employee Type</label>
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <select class="form-control" ng-model="createEmployeeForm.employee_type" ng-options="employee_type for employee_type in employeeTypes" required>
+                    <option value="">Select employee type</option>
+              </select>
+              <span class="help-block has-error" ng-if="createEmployee.employee_type.$dirty">
+                <span ng-show="createEmployee.employee_type.$error.required">Employee type is required.</span>                
+              </span>
+            </div>
           </div>
+        </div>
 
-          <div class="form-group" ng-class="{'has-error':createCompany.industryType.$invalid && createCompany.industryType.$dirty}">
-          	<label class="col-md-4 control-label">Industry Type</label>
-          	<div class="col-md-4 inputGroupContainer">
-          		<div class="input-group">
-          			<input type="text" class="form-control" placeholder="Software or Hardware etc." name="industryType" ng-model="createCompanyForm.industryType" required >
-              		<span class="help-block has-error" ng-if="createCompany.industryType.$dirty">
-              			<span ng-show="createCompany.industryType.$error.required">Industry type is required.</span>     
-            			</span>
-      			</div>
-    			</div>          
-          </div>
+        <div class="form-group" ng-class="{'has-error':createEmployee.employee_company.$invalid && createEmployee.employee_company.$dirty}">
+          <label class="col-md-4 control-label">Company</label>
+          <div class="col-md-4 inputGroupContainer">
+              <div class="input-group">
+               <select class="form-control" ng-model="createEmployeeForm.employee_company" ng-options="company.id as company.name for company in companies" ng-change="fetchCompanyDepartments('create')" required>
+                    <option value="">Select company</option>
+                </select>
+
+                <span class="help-block has-error" ng-if="createEmployee.employee_company.$dirty">
+                  <span ng-show="createEmployee.employee_company.$error.required">Company is required.</span>
+                </span>
+             </div>
+         </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error':createEmployee.employee_department.$invalid && createEmployee.employee_department.$dirty}">
+          <label class="col-md-4 control-label">Department</label>
+          <div class="col-md-4 inputGroupContainer">
+              <div class="input-group">
+               <select class="form-control" ng-model="createEmployeeForm.employee_department" ng-options="department.id as department.name for department in companyDepartments" ng-change="fetchDepartmentDesignations('create')" required>
+                    <option value="">Select department</option>
+                </select>
+                <span class="help-block has-error" ng-if="createEmployee.employee_department.$dirty">
+                  <span ng-show="createEmployee.employee_department.$error.required">Department is required.</span>
+                </span>
+             </div>
+         </div>
+        </div>
+
+        <div class="form-group" ng-class="{'has-error':createEmployee.employee_designation.$invalid && createEmployee.employee_designation.$dirty}">
+          <label class="col-md-4 control-label">Designation</label>
+          <div class="col-md-4 inputGroupContainer">
+              <div class="input-group">
+               <select class="form-control" ng-model="createEmployeeForm.employee_designation" ng-options="designation.id as designation.name for designation in departmentDesignations" required>
+                    <option value="">Select designation</option>
+                </select>
+                <span class="help-block has-error" ng-if="createEmployee.employee_designation.$dirty">
+                  <span ng-show="createEmployee.employee_designation.$error.required">Designation is required.</span>
+                </span>
+             </div>
+         </div>
+        </div>
+   
 
           <div class="form-group">
     			<label class="col-md-4 control-label"></label>
     			<div class="col-md-4">
-    				<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="createCompany.$invalid || isCompanyExist || isCompanyWebsiteExist || !isValidWebsite" ng-click="createNewCompany()">
-  	        		<span ng-hide="createCompanyForm.loading">Create Company <span class="glyphicon glyphicon-send"></span></span>
-  	        		<span class="overlord-loading-spinner fa fa-spinner" ng-show="createCompanyForm.loading" > <span class="glyphicon glyphicon-send"></span></span>
-  	        		<span ng-show="createCompanyForm.loading">Preparing your new company...<span class="glyphicon glyphicon-send"></span></span>
+    				<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="createEmployee.$invalid || isEmployeeEmailExist" ng-click="createNewEmployee()">
+  	        		<span ng-hide="createEmployeeForm.loading">Create Employee <span class="glyphicon glyphicon-send"></span></span>
+  	        		<span class="overlord-loading-spinner fa fa-spinner" ng-show="createEmployeeForm.loading" > <span class="glyphicon glyphicon-send"></span></span>
+  	        		<span ng-show="createCompanyForm.loading">Preparing your new employee...<span class="glyphicon glyphicon-send"></span></span>
         			</button>
-        			<a href="#/companies" class="btn btn-primary btn-lg btn-block">Back</a>
+        			<a href="#/employees" class="btn btn-primary btn-lg btn-block">Back</a>
     			</div>
   		</div>
   	</form>    
