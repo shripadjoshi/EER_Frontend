@@ -112,21 +112,22 @@ angular.module('EERApp.employee', ['ngRoute'])
 	    }
     },
 
-   /* $scope.validateEmployeeWebsiteExist = function(employeeWebsite){
-		if ($scope.allWebsites.indexOf($filter('toLowerCase')(employeeWebsite)) > -1) {
-	        $scope.isEmployeeWebsiteExist = true;
-	    } else {
-	        $scope.isEmployeeWebsiteExist = false;
-	    }
-    },
-
-    $scope.validateEmployeeWebsite = function(employeeWebsite){
-		if($scope.urlRegex.test(employeeWebsite)) {
-            $scope.isValidWebsite = true;
-        } else {
-            $scope.isValidWebsite = false;
+    $scope.generateFullName = function(){
+        var salutation = "",
+            first_name = "",
+            middle_name = "",
+            last_name = "";
+        if("salutation" in $scope.createEmployeeForm){
+            salutation = ($scope.createEmployeeForm.salutation.length > 0 ? $scope.createEmployeeForm.salutation : "" )
+        }if("first_name" in $scope.createEmployeeForm){
+            first_name = ($scope.createEmployeeForm.first_name.length > 0 ? $scope.createEmployeeForm.first_name : "" )
+        }if("middle_name" in $scope.createEmployeeForm){
+            middle_name = ($scope.createEmployeeForm.middle_name.length > 0 ? $scope.createEmployeeForm.middle_name : "" )
+        }if("last_name" in $scope.createEmployeeForm){
+            last_name = ($scope.createEmployeeForm.last_name.length > 0 ? $scope.createEmployeeForm.last_name : "" )
         }
-    },*/
+        $scope.createEmployeeForm.full_name = salutation + " "+first_name+" "+middle_name+" "+last_name
+    },
 
     $scope.createNewEmployee = function(){
     	$scope.employeeForm.loading = true;
