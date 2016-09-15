@@ -20,7 +20,7 @@
             <label class="col-md-4 control-label">Salutation</label>
             <div class="col-md-8 inputGroupContainer">
               <div class="input-group">
-                <select class="form-control" ng-model="createEmployeeForm.salutation" ng-options="salutation for salutation in salutations" required ng-change="generateFullName()">
+                <select class="form-control" ng-model="createEmployeeForm.salutation" ng-options="salutation for salutation in salutations" required>
                       <option value="">Select salutation</option>
                 </select>
                 <span class="help-block has-error" ng-if="createEmployee.salutation.$dirty">
@@ -34,7 +34,7 @@
             <label class="col-md-4 control-label">First name</label>
             <div class="col-md-8 inputGroupContainer">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="First name" name="first_name" ng-model="createEmployeeForm.first_name" ng-maxlength="20" required ng-blur="generateFullName()">
+                <input type="text" class="form-control" placeholder="First name" name="first_name" ng-model="createEmployeeForm.first_name" ng-maxlength="20" required>
                 <span class="help-block has-error" ng-if="createEmployee.first_name.$dirty">
                   <span ng-show="createEmployee.first_name.$error.required">First name is required.</span>
                   <span ng-show="createEmployee.first_name.$error.maxlength">The first name cannot be more than 20 characters.</span>             
@@ -49,7 +49,7 @@
             <label class="col-md-4 control-label">Middle name</label>
             <div class="col-md-8 inputGroupContainer">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Middle name" name="middle_name" ng-model="createEmployeeForm.middle_name" ng-maxlength="20" ng-blur="generateFullName()">
+                <input type="text" class="form-control" placeholder="Middle name" name="middle_name" ng-model="createEmployeeForm.middle_name" ng-maxlength="20">
                 <span class="help-block has-error" ng-if="createEmployee.middle_name.$dirty">
                   <span ng-show="createEmployee.middle_name.$error.maxlength">The middle name cannot be more than 20 characters.</span>
                 </span>
@@ -61,7 +61,7 @@
             <label class="col-md-4 control-label">Last name</label>
             <div class="col-md-8 inputGroupContainer">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Last name" name="last_name" ng-model="createEmployeeForm.last_name" ng-maxlength="20" required ng-blur="generateFullName()">
+                <input type="text" class="form-control" placeholder="Last name" name="last_name" ng-model="createEmployeeForm.last_name" ng-maxlength="20" required>
                 <span class="help-block has-error" ng-if="createEmployee.last_name.$dirty">
                   <span ng-show="createEmployee.last_name.$error.required">Last name is required.</span>
                   <span ng-show="createEmployee.last_name.$error.maxlength">The last name cannot be more than 20 characters.</span>             
@@ -71,12 +71,12 @@
           </div>
         </div>
 
-        <div class="row">
+        <!-- <div class="row">
           <div class="form-group col-sm-6" ng-class="{'has-error':createEmployee.full_name.$invalid && createEmployee.full_name.$dirty}">
             <label class="col-md-4 control-label">Full name</label>
             <div class="col-md-8 inputGroupContainer">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Full name" name="full_name" ng-model="createEmployeeForm.full_name" ng-maxlength="20" ng-disabled="true" required>               
+                <input type="text" class="form-control" placeholder="Full name" name="full_name" ng-model="createEmployeeForm.full_name" ng-disabled="true">               
               </div>
             </div>
           </div>
@@ -84,11 +84,11 @@
             <label class="col-md-4 control-label">Employee Id</label>
             <div class="col-md-8 inputGroupContainer">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Employee Id" name="emp_id" ng-model="createEmployeeForm.emp_id" ng-maxlength="20" ng-disabled="true" required>               
+                <input type="text" class="form-control" placeholder="Employee Id" name="emp_id" ng-model="createEmployeeForm.emp_id" ng-disabled="true">               
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <div class="row">
           <div class="form-group col-sm-6" ng-class="{'has-error':createEmployee.email_id.$invalid && createEmployee.email_id.$dirty}">
@@ -190,7 +190,7 @@
             	<label class="col-md-4 control-label">Phone no.</label>
             	<div class="col-md-8 inputGroupContainer">
             		<div class="input-group">
-            			<input type="number" class="form-control" placeholder="912448798" name="phone_no" ng-model="createEmployeeForm.phone_no" ng-pattern="/^[0-9]+$/">
+            			<input type="number" class="form-control" placeholder="2448798" name="phone_no" ng-model="createEmployeeForm.phone_no" ng-pattern="/^[0-9]+$/">
                 		<span class="help-block has-error" ng-if="createEmployee.phone_no.$dirty">
                 			<span ng-show="createEmployee.phone_no.$error.number">Not valid phone no!</span>
                 			<span ng-show="createEmployee.phone_no.$error.pattern">The phone no cannot be negative.</span>        
@@ -275,6 +275,14 @@
                     <span class="help-block has-error" ng-if="createEmployee.employee_designation.$dirty">
                       <span ng-show="createEmployee.employee_designation.$error.required">Designation is required.</span>
                     </span>
+                 </div>
+             </div>
+            </div>
+            <div class="form-group col-sm-6" ng-class="{'has-error':createEmployee.isDeleted.$invalid && createEmployee.isDeleted.$dirty}">
+              <label class="col-md-4 control-label">Is Deleted?</label>
+              <div class="col-md-8 inputGroupContainer">
+                  <div class="input-group">
+                   <input type="checkbox" name="isDeleted" ng-model="createEmployeeForm.isDeleted">
                  </div>
              </div>
             </div>

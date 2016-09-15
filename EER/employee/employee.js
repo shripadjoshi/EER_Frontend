@@ -51,6 +51,7 @@ angular.module('EERApp.employee', ['ngRoute'])
     $scope.companyDepartments = "";
     $scope.departmentDesignations = ""
     $scope.isEmployeeEmailExist = false;
+    $scope.maxEmployeeId = 0;
     
     $scope.employeeForm = {
         loading: false
@@ -75,13 +76,16 @@ angular.module('EERApp.employee', ['ngRoute'])
         .success(function(data) {
             $scope.employees = data;
             var allEmails = [];
-            //var allWebs = [];
+            var allEmpIds = [];
             angular.forEach($scope.employees, function(obj) {
                 allEmails.push($filter('toLowerCase')(obj.email_id));
-                //allWebs.push($filter('toLowerCase')(obj.website));
+                allEmpIds.push(obj.emp_id);
             });
             $scope.allEmployeeEmails = allEmails;
-            //$scope.allWebsites = allWebs;
+            if(allEmpIds.length > 0)
+                $scope.maxEmployeeId = parseInt(Math.max.apply(Math,allEmpIds))+1;
+            else
+               $scope.maxEmployeeId = 1 
         }).error(function(err) {
             $scope.message = "";
             $scope.isMsg = false;
@@ -112,52 +116,83 @@ angular.module('EERApp.employee', ['ngRoute'])
 	    }
     },
 
-    $scope.generateFullName = function(){
-        var salutation = "",
-            first_name = "",
-            middle_name = "",
-            last_name = "";
-        if("salutation" in $scope.createEmployeeForm){
-            salutation = ($scope.createEmployeeForm.salutation.length > 0 ? $scope.createEmployeeForm.salutation : "" )
-        }if("first_name" in $scope.createEmployeeForm){
-            first_name = ($scope.createEmployeeForm.first_name.length > 0 ? $scope.createEmployeeForm.first_name : "" )
-        }if("middle_name" in $scope.createEmployeeForm){
-            middle_name = ($scope.createEmployeeForm.middle_name.length > 0 ? $scope.createEmployeeForm.middle_name : "" )
-        }if("last_name" in $scope.createEmployeeForm){
-            last_name = ($scope.createEmployeeForm.last_name.length > 0 ? $scope.createEmployeeForm.last_name : "" )
-        }
-        $scope.createEmployeeForm.full_name = salutation + " "+first_name+" "+middle_name+" "+last_name
-    },
-
     $scope.createNewEmployee = function(){
     	$scope.employeeForm.loading = true;
-    	console.log($scope.createEmployeeForm)
-    	/*var formData = {
-    		name: $scope.createEmployeeForm.name,
-    		website: $scope.createEmployeeForm.website,
-    		address: $scope.createEmployeeForm.address,
-    		country: $scope.createEmployeeForm.country,
-    		state: $scope.createEmployeeForm.state,
-    		city: $scope.createEmployeeForm.city,
-    		pincode: parseInt($scope.createEmployeeForm.pincode),
-    		phone_no: parseInt($scope.createEmployeeForm.phone_no),
-    		mobile_no: parseInt($scope.createEmployeeForm.mobile_no),
-    		EmployeeType: $scope.createEmployeeForm.EmployeeType,
-    		industryType: $scope.createEmployeeForm.industryType
-    	};
-    	EmployeeDetails.createNewEmployee(formData)
-            .success(function(data) {
-                $scope.isMsg = true;
-                $scope.message = $filter('capitalize')(formData.name) + " employee successfully created";
-                $scope.createEmployeeForm = "";
-                $scope.errMessage = "";
-                $scope.isErr = false;
+        console.log($scope.createEmployeeForm)
+
+        EmployeeDetails.get()
+        .success(function(data) {
+            var allEmpIds = [];
+            angular.forEach(data, function(obj) {
+                allEmpIds.push(obj.emp_id);
+            });
+            if(allEmpIds.length > 0)
+                $scope.maxEmployeeId = parseInt(Math.max.apply(Math,allEmpIds))+1;
+            else
+               $scope.maxEmployeeId = 1;
+            var empId = 0;
+            if($scope.createEmployeeForm.employee_type != "Master"){
+                empId = $scope.maxEmployeeId;
+            }
+            var salutation = "",
+                first_name = "",
+                middle_name = "",
+                last_name = "";
+            if("salutation" in $scope.createEmployeeForm){
+                salutation = ($scope.createEmployeeForm.salutation.length > 0 ? $scope.createEmployeeForm.salutation : "" )
+            }if("first_name" in $scope.createEmployeeForm){
+                first_name = ($scope.createEmployeeForm.first_name.length > 0 ? $scope.createEmployeeForm.first_name : "" )
+            }if("middle_name" in $scope.createEmployeeForm){
+                middle_name = ($scope.createEmployeeForm.middle_name.length > 0 ? $scope.createEmployeeForm.middle_name : "" )
+            }if("last_name" in $scope.createEmployeeForm){
+                last_name = ($scope.createEmployeeForm.last_name.length > 0 ? $scope.createEmployeeForm.last_name : "" )
+            }
+            $scope.createEmployeeForm.full_name = salutation + " "+first_name+" "+middle_name+" "+last_name
+            var formData = {
+                salutation: $scope.createEmployeeForm.salutation,
+                first_name: $scope.createEmployeeForm.first_name,
+                middle_name: $scope.createEmployeeForm.middle_name,
+                last_name: $scope.createEmployeeForm.last_name,
+                full_name: $scope.createEmployeeForm.full_name,
+                emp_id: empId,
+                email_id: $scope.createEmployeeForm.email_id,
+                address: $scope.createEmployeeForm.address,
+                landmark: $scope.createEmployeeForm.landmark,
+                country: $scope.createEmployeeForm.country,
+                state: $scope.createEmployeeForm.state,
+                city: $scope.createEmployeeForm.city,
+                pincode: parseInt($scope.createEmployeeForm.pincode),
+                phone_no: parseInt($scope.createEmployeeForm.phone_no),
+                mobile_no: parseInt($scope.createEmployeeForm.mobile_no),
+                employee_type: $scope.createEmployeeForm.employee_type,
+                employee_company: $scope.createEmployeeForm.employee_company,
+                employee_department: $scope.createEmployeeForm.employee_department,
+                employee_designation: $scope.createEmployeeForm.employee_designation,
+                isDeleted: $scope.createEmployeeForm.isDeleted
+            };
+            EmployeeDetails.createNewEmployee(formData)
+                .success(function(data) {
+                    $scope.isMsg = true;
+                    $scope.message = $filter('capitalize')(formData.full_name) + " employee successfully created";
+                    $scope.createEmployeeForm = "";
+                    $scope.errMessage = "";
+                    $scope.isErr = false;
+                }).error(function(err) {
+                    $scope.message = "";
+                    $scope.isMsg = false;
+                    $scope.errMessage = err.message;
+                    $scope.isErr = true;
+                });
+
             }).error(function(err) {
                 $scope.message = "";
                 $scope.isMsg = false;
                 $scope.errMessage = err.message;
                 $scope.isErr = true;
-            });*/
+            });
+
+    	
+    	
     },
 
     $scope.deleteEmployee = function(employeeId, name) {
