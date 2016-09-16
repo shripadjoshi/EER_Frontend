@@ -173,13 +173,13 @@
             	<label class="col-md-4 control-label">Pincode</label>
             	<div class="col-md-8 inputGroupContainer">
             		<div class="input-group">
-            			<input type="number" class="form-control" placeholder="411058" name="pincode" ng-model="createEmployeeForm.pincode" required ng-maxlength="6" ng-minlength="6" ng-pattern="/^[0-9]+$/">
+            			<input type="number" class="form-control" placeholder="411058" name="pincode" ng-model="createEmployeeForm.pincode" required ng-maxlength="6" ng-minlength="6" ng-pattern="/^[1-9][0-9]+$/">
                 		<span class="help-block has-error" ng-if="createEmployee.pincode.$dirty">
                 			<span ng-show="createEmployee.pincode.$error.required">Pincode is required.</span>
                 			<span ng-show="createEmployee.pincode.$error.maxlength">The pincode cannot be more than 6 numbers.</span>
                 			<span ng-show="createEmployee.pincode.$error.number">Not valid pincode!</span>
                 			<span ng-show="createEmployee.pincode.$error.minlength">The pincode cannot be less than 6 numbers.</span>
-                			<span ng-show="createEmployee.pincode.$error.pattern">The pincode cannot be negative.</span>
+                			<span ng-show="createEmployee.pincode.$error.pattern">The pincode cannot be negative or it should not starts with 0.</span>
               			</span>
         			</div>
       			</div>
@@ -190,10 +190,10 @@
             	<label class="col-md-4 control-label">Phone no.</label>
             	<div class="col-md-8 inputGroupContainer">
             		<div class="input-group">
-            			<input type="number" class="form-control" placeholder="2448798" name="phone_no" ng-model="createEmployeeForm.phone_no" ng-pattern="/^[0-9]+$/">
+            			<input type="number" class="form-control" placeholder="2448798" name="phone_no" ng-model="createEmployeeForm.phone_no" ng-pattern="/^[1-9][0-9]+$/">
                 		<span class="help-block has-error" ng-if="createEmployee.phone_no.$dirty">
                 			<span ng-show="createEmployee.phone_no.$error.number">Not valid phone no!</span>
-                			<span ng-show="createEmployee.phone_no.$error.pattern">The phone no cannot be negative.</span>        
+                			<span ng-show="createEmployee.phone_no.$error.pattern">The phone no cannot be negative or it sholud not starts with 0.</span>        
               			</span>
         			</div>
       			</div>
@@ -205,13 +205,13 @@
           	<label class="col-md-4 control-label">Mobile no.</label>
           	<div class="col-md-8 inputGroupContainer">
           		<div class="input-group">
-          			<input type="number" class="form-control" placeholder="9999988888" name="mobile_no" ng-model="createEmployeeForm.mobile_no" required ng-maxlength="10" ng-minlength="10" ng-pattern="/^[0-9]+$/">
+          			<input type="number" class="form-control" placeholder="9999988888" name="mobile_no" ng-model="createEmployeeForm.mobile_no" required ng-maxlength="10" ng-minlength="10" ng-pattern="/^[1-9][0-9]+$/">
               		<span class="help-block has-error" ng-if="createEmployee.mobile_no.$dirty">
               			<span ng-show="createEmployee.mobile_no.$error.required">Mobile no. is required.</span>
               			<span ng-show="createEmployee.mobile_no.$error.maxlength">The mobile no cannot be more than 10 numbers.</span>
               			<span ng-show="createEmployee.mobile_no.$error.number">Not valid mobile no!</span>
               			<span ng-show="createEmployee.mobile_no.$error.minlength">The mobile no cannot be less than 10 numbers.</span>
-              			<span ng-show="createEmployee.mobile_no.$error.pattern">The mobile no cannot be negative.</span>          
+              			<span ng-show="createEmployee.mobile_no.$error.pattern">The mobile no cannot be negative or it should not starts with 0.</span>          
             			</span>
         			</div>
       			</div>
@@ -221,7 +221,7 @@
             <label class="col-md-4 control-label">Employee Type</label>
             <div class="col-md-8 inputGroupContainer">
               <div class="input-group">
-                <select class="form-control" ng-model="createEmployeeForm.employee_type" ng-options="employee_type for employee_type in employeeTypes" required>
+                <select class="form-control" ng-model="createEmployeeForm.employee_type" ng-options="employee_type for employee_type in employeeTypes" required >
                       <option value="">Select employee type</option>
                 </select>
                 <span class="help-block has-error" ng-if="createEmployee.employee_type.$dirty">
@@ -237,7 +237,7 @@
             <label class="col-md-4 control-label">Company</label>
             <div class="col-md-8 inputGroupContainer">
                 <div class="input-group">
-                 <select class="form-control" ng-model="createEmployeeForm.employee_company" ng-options="company.id as company.name for company in companies" ng-change="fetchCompanyDepartments('create')" required>
+                 <select class="form-control" ng-model="createEmployeeForm.employee_company" ng-options="company.id as company.name for company in companies" ng-change="fetchCompanyDepartments('create')" ng-required="createEmployeeForm.employee_type!='Master' ? true : false">
                       <option value="">Select company</option>
                   </select>
 
@@ -252,7 +252,7 @@
             <label class="col-md-4 control-label">Department</label>
             <div class="col-md-8 inputGroupContainer">
                 <div class="input-group">
-                 <select class="form-control" ng-model="createEmployeeForm.employee_department" ng-options="department.id as department.name for department in companyDepartments" ng-change="fetchDepartmentDesignations('create')" required>
+                 <select class="form-control" ng-model="createEmployeeForm.employee_department" ng-options="department.id as department.name for department in companyDepartments" ng-change="fetchDepartmentDesignations('create')" ng-required="createEmployeeForm.employee_type!='Master' ? true : false">
                       <option value="">Select department</option>
                   </select>
                   <span class="help-block has-error" ng-if="createEmployee.employee_department.$dirty">
@@ -269,7 +269,7 @@
               <label class="col-md-4 control-label">Designation</label>
               <div class="col-md-8 inputGroupContainer">
                   <div class="input-group">
-                   <select class="form-control" ng-model="createEmployeeForm.employee_designation" ng-options="designation.id as designation.name for designation in departmentDesignations" required>
+                   <select class="form-control" ng-model="createEmployeeForm.employee_designation" ng-options="designation.id as designation.name for designation in departmentDesignations" ng-required="createEmployeeForm.employee_type!='Master' ? true : false">
                         <option value="">Select designation</option>
                     </select>
                     <span class="help-block has-error" ng-if="createEmployee.employee_designation.$dirty">

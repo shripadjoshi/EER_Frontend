@@ -18,7 +18,8 @@
 		      <th>Name</th>
 		      <th>Email</th>
 		      <!-- <th>User Name</th>-->
-		      <th>Employee type</th>      
+		      <th>Employee type</th>  
+		      <th>Is Deleted?</th>  
 		      <th></th>
 		    </tr>
 	  	</thead>
@@ -34,11 +35,15 @@
 				<td>{{employee.full_name}}</td>
 				<td>{{employee.email_id}}</td>
 				<!-- <td>{{employee.user_name}}</td>-->
-				<td>{{employee.employee_type}}</td>								
+				<td>{{employee.employee_type}}</td>							
+				<td>
+					<toggle-switch ng-model="employee.isDeleted" on-label="Yes" off-label="No" class="switch-danger" ng-change="toggleEmployeeIsDeleted(employee.id, employee.full_name, employee.isDeleted)">
+                	</toggle-switch>
+				</td>							
 				<td>
 					<a href="javascript:void(0)" class="btn btn-success" data-toggle="modal" data-target="#{{employee.id}}_{{employee.emp_id}}">Other Information</a>
 					<a href="#/employee/edit/{{employee.id}}" class="btn btn-primary">Edit</a>
-					<a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteEmployee(employee.id, employee.name)">Delete</a>
+					<!--<a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteEmployee(employee.id, employee.full_name)">Delete</a>-->
 				</td>
 			</tr>			
 		</tbody>

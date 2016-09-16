@@ -13,6 +13,9 @@ angular.module('EERApp.employee', ['ngRoute'])
         updateEmployee: function(employeeId, employeeObj) {
             return $http.put('http://localhost:1337/employee/' + employeeId, employeeObj)
         },
+        updateEmployeeIsDeleted: function(employeeId, isDeletedStatus) {
+            return $http.put('http://localhost:1337/employee/' + employeeId, {isDeleted: isDeletedStatus})
+        },
         deleteEmployee: function(employeeId) {
             return $http.delete('http://localhost:1337/employee/' + employeeId)
         },
@@ -98,7 +101,41 @@ angular.module('EERApp.employee', ['ngRoute'])
         EmployeeDetails.getEmployee($routeParams.id)
             .success(function(employeeData) {
                 $scope.selectedEmployee = employeeData;
-                $scope.isValidWebsite = true;
+                $scope.isEmployeeEmailExist = false;
+                if($scope.selectedEmployee.employee_company.id > 0){
+                    var company = "";
+                    company = $scope.selectedEmployee.employee_company.id;        
+                    if(company > 0){
+                        CompanyDetails.getCompany(company)
+                        .success(function(companyData) {
+                            $scope.companyDepartments = companyData.departments;
+                            var department = "";
+                            department = $scope.selectedEmployee.employee_department.id;        
+                            if(department > 0){
+                                DepartmentDetails.getDepartment(department)
+                                .success(function(departmentData) {
+                                    $scope.departmentDesignations = departmentData.designations;
+                                }).error(function(err) {
+                                    $scope.message = "";
+                                    $scope.isMsg = false;
+                                    $scope.errMessage = err.message;
+                                    $scope.isErr = true;
+                                });
+                            }
+                            else{
+                                $scope.departmentDesignations = "";
+                            }              
+                        }).error(function(err) {
+                            $scope.message = "";
+                            $scope.isMsg = false;
+                            $scope.errMessage = err.message;
+                            $scope.isErr = true;
+                        });
+                    }
+                    else{
+                        $scope.companyDepartments = "";
+                    }
+                }
             }).error(function(err) {
                 $scope.message = "";
                 $scope.isMsg = false;
@@ -118,8 +155,7 @@ angular.module('EERApp.employee', ['ngRoute'])
 
     $scope.createNewEmployee = function(){
     	$scope.employeeForm.loading = true;
-        console.log($scope.createEmployeeForm)
-
+        
         EmployeeDetails.get()
         .success(function(data) {
             var allEmpIds = [];
@@ -195,21 +231,23 @@ angular.module('EERApp.employee', ['ngRoute'])
     	
     },
 
-    $scope.deleteEmployee = function(employeeId, name) {
+    $scope.deleteEmployee = function(employeeId, empName) {
+        console.log(employeeId);
+        console.log(empName);
         EmployeeDetails.deleteEmployee(employeeId)
             .success(function(data) {
                 EmployeeDetails.get()
                     .success(function(data) {
                         $scope.employees = data;
                         $scope.isMsg = true;
-                        $scope.message = $filter('capitalize')(name) + " employee successfully deleted";
+                        $scope.message = empName + " employee successfully deleted";
                     }).error(function(err) {
                         $scope.message = "";
                         $scope.isMsg = false;
                         $scope.errMessage = err.message;
                         $scope.isErr = true;
                     });
-            }).error(function(data) {
+            }).error(function(err) {
                 $scope.message = "";
                 $scope.isMsg = false;
                 $scope.errMessage = err.message;
@@ -218,24 +256,74 @@ angular.module('EERApp.employee', ['ngRoute'])
 
     },
 
-    $scope.editEmployeeDetails = function(employeeId){
-        $scope.employeeForm.loading = true;
-        EmployeeDetails.updateEmployee(employeeId, $scope.selectedEmployee)
+    $scope.toggleEmployeeIsDeleted = function(id, full_name, isDeleted) {
+        EmployeeDetails.updateEmployeeIsDeleted(id, isDeleted)
             .success(function(data) {
                 $scope.isMsg = true;
-                $scope.message = $filter('capitalize')($scope.selectedEmployee.name) + " employee successfully updated";
+                $scope.message = $filter('capitalize')(full_name) + " successfully updated"
+                $scope.errMessage = "";
+                $scope.isErr = false;
+            }).error(function(err) {
+                $scope.message = "";
+                $scope.isMsg = false;
+                $scope.errMessage = err.message;
+                $scope.isErr = true;
+            });
+    },
+
+    $scope.editEmployeeDetails = function(employeeId){
+        $scope.employeeForm.loading = true;
+        var salutation = "",
+                first_name = "",
+                middle_name = "",
+                last_name = "";
+        if("salutation" in $scope.selectedEmployee){
+            salutation = ($scope.selectedEmployee.salutation.length > 0 ? $scope.selectedEmployee.salutation : "" )
+        }if("first_name" in $scope.selectedEmployee){
+            first_name = ($scope.selectedEmployee.first_name.length > 0 ? $scope.selectedEmployee.first_name : "" )
+        }if("middle_name" in $scope.selectedEmployee){
+            middle_name = ($scope.selectedEmployee.middle_name.length > 0 ? $scope.selectedEmployee.middle_name : "" )
+        }if("last_name" in $scope.selectedEmployee){
+            last_name = ($scope.selectedEmployee.last_name.length > 0 ? $scope.selectedEmployee.last_name : "" )
+        }
+        $scope.selectedEmployee.full_name = salutation + " "+first_name+" "+middle_name+" "+last_name;
+        var formData = {
+                salutation: $scope.selectedEmployee.salutation,
+                first_name: $scope.selectedEmployee.first_name,
+                middle_name: $scope.selectedEmployee.middle_name,
+                last_name: $scope.selectedEmployee.last_name,
+                full_name: $scope.selectedEmployee.full_name,
+                email_id: $scope.selectedEmployee.email_id,
+                address: $scope.selectedEmployee.address,
+                landmark: $scope.selectedEmployee.landmark,
+                country: $scope.selectedEmployee.country,
+                state: $scope.selectedEmployee.state,
+                city: $scope.selectedEmployee.city,
+                pincode: parseInt($scope.selectedEmployee.pincode),
+                phone_no: parseInt($scope.selectedEmployee.phone_no),
+                mobile_no: parseInt($scope.selectedEmployee.mobile_no),
+                employee_type: $scope.selectedEmployee.employee_type,
+                employee_company: $scope.selectedEmployee.employee_company,
+                employee_department: $scope.selectedEmployee.employee_department,
+                employee_designation: $scope.selectedEmployee.employee_designation,
+                isDeleted: $scope.selectedEmployee.isDeleted
+            };        
+        EmployeeDetails.updateEmployee(employeeId, formData)
+            .success(function(data) {
+                $scope.isMsg = true;
+                $scope.message = ($scope.selectedEmployee.full_name) + " successfully updated";
                 $scope.employeeForm.loading = false;                
                 EmployeeDetails.get()
                     .success(function(data) {
 			            $scope.employees = data;
-			            var allComps = [];
+			            /*var allComps = [];
 			            var allWebs = [];
 			            angular.forEach($scope.employees, function(obj) {
 			                allComps.push(obj.name);
 			                allWebs.push(obj.website);
 			            });
 			            $scope.allEmployees = allComps;
-			            $scope.allWebsites = allWebs;
+			            $scope.allWebsites = allWebs;*/
 			        }).error(function(err) {
 			            $scope.message = "";
 			            $scope.isMsg = false;
