@@ -9,7 +9,8 @@ angular.module('EERApp', [
     'EERApp.company',
     'EERApp.department',
     'EERApp.designation',
-    'EERApp.employee'
+    'EERApp.employee',
+    'EERApp.user'
 ])
 
 .filter('capitalize', function() {

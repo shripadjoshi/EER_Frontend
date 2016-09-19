@@ -11,7 +11,6 @@ angular.module('EERApp.employee', ['ngRoute'])
             return $http.get('http://localhost:1337/employee/' + employeeId);
         },
         updateEmployee: function(employeeId, employeeObj) {
-            console.log(employeeObj)
             return $http.put('http://localhost:1337/employee/' + employeeId, employeeObj)
         },
         updateEmployeeIsDeleted: function(employeeId, isDeletedStatus) {
@@ -326,14 +325,12 @@ angular.module('EERApp.employee', ['ngRoute'])
 			            $scope.allEmployees = allComps;
 			            $scope.allWebsites = allWebs;*/
 			        }).error(function(err) {
-                        console.log("inside error");
-			            $scope.message = "";
+                        $scope.message = "";
 			            $scope.isMsg = false;
 			            $scope.errMessage = err.message;
 			            $scope.isErr = true;
                     })
             }).error(function(err) {
-                console.log("Main error")
                 $scope.message = "";
                 $scope.isMsg = false;
                 $scope.errMessage = err.message;

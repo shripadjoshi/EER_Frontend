@@ -1,0 +1,41 @@
+<div class="container">
+	<h1>Users</h1>
+	<div ng-if="isMsg" class="alert alert-info">
+	  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	  {{message}}
+	</div>
+
+	<div ng-if="isErr" class="alert alert-danger">
+	  <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+	  {{errMessage}}
+	</div>
+
+	<a href="#/user/new">Create new user</a>
+	<table id="users" cellspacing="0" width="100%" datatable="ng" class="row-border hover">
+		<thead>
+		    <tr>
+		      <th>Employee Name</th>
+		      <th>User Name</th>
+		      <th></th>
+		    </tr>
+	  	</thead>
+	  	<!--<tfoot>
+		    <tr>
+		      <th>Name</th>
+		      <th></th>
+		    </tr>
+	  	</tfoot>-->
+		<tbody>
+			<tr ng-repeat="user in users" >				
+				<td>{{user.employee.full_name}}</td>
+				<td>{{user.user_name }}</td>							
+				<td>
+					<a href="#/user/edit/{{user.id}}" class="btn btn-primary">Edit</a>
+					<a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteCompany(user.id, user.user_name)">Delete</a>
+				</td>
+			</tr>		
+		</tbody>
+	</table>
+</div>
+
+

@@ -1,0 +1,176 @@
+<fieldset>
+<div class="container">
+  <div ng-if="isMsg" class="alert alert-success">
+    <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{message}}
+  </div>
+
+  <div ng-if="isErr" class="alert alert-danger">
+    <a href="javascript:void(0)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    {{errMessage}}
+  </div>
+  <form id="edit-company-form" class= "well form-horizontal" name="editCompany">
+    <legend>Edit Company</legend>
+        
+        <div class="form-group" ng-class="{'has-error':editCompany.name.$invalid && editCompany.name.$dirty}">
+        	<label class="col-md-4 control-label">Company Name</label>
+   			<div class="col-md-4 inputGroupContainer">
+  				<div class="input-group">
+	  				<input type="text" class="form-control" placeholder="Company" name="name" ng-model="selectedCompany.name" ng-maxlength="200" required ng-blur="validateCompanyExist(selectedCompany.name)">
+	            	<span class="help-block has-error" ng-if="editCompany.name.$dirty">
+	            		<span ng-show="editCompany.name.$error.required">Name is required.</span>
+	            		<span ng-show="editCompany.name.$error.maxlength">The name cannot be more than 200 characters.</span>
+	            		<span ng-show="isCompanyExist" class="help-block">Company is already taken.</span>
+	          		</span>
+    			</div>
+  			</div>
+  		</div>
+
+        <div class="form-group" ng-class="{'has-error':editCompany.website.$invalid && editCompany.website.$dirty}">
+        	<label class="col-md-4 control-label">Company Website</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<input type="text" class="form-control" placeholder="http://" name="website" ng-model="selectedCompany.website" ng-maxlength="200" required ng-blur="validateCompanyWebsiteExist(selectedCompany.website)" ng-change="validateCompanyWebsite(selectedCompany.website)">
+            		<span class="help-block has-error" ng-if="editCompany.website.$dirty">
+			            <span ng-show="editCompany.website.$error.required">Company website is required.</span>
+			            <span ng-show="editCompany.website.$error.maxlength">The website cannot be more than 200 characters.</span>
+			            <span ng-show="isCompanyWebsiteExist" class="help-block">Company website is already taken.</span>
+			            <span ng-hide="isValidWebsite" class="help-block">Enter proper company website.</span>
+          			</span>
+    			</div>
+  			</div>
+  		</div>
+
+        <div class="form-group" ng-class="{'has-error':editCompany.address.$invalid && editCompany.address.$dirty}">
+        	<label class="col-md-4 control-label">Address</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<textarea class="form-control" placeholder="Address" name="address" ng-model="selectedCompany.address" required ></textarea>
+            		<span class="help-block has-error" ng-if="editCompany.address.$dirty">
+            			<span ng-show="editCompany.address.$error.required">Address is required.</span>            
+          			</span>
+    			</div>
+  			</div>
+  		</div>
+
+  		<div class="form-group" ng-class="{'has-error':editCompany.country.$invalid && editCompany.country.$dirty}">
+        	<label class="col-md-4 control-label">Country</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<input type="text" class="form-control" placeholder="e.g. India" name="country" ng-model="selectedCompany.country" required >
+            		<span class="help-block has-error" ng-if="editCompany.country.$dirty">
+            			<span ng-show="editCompany.country.$error.required">Country is required.</span>            
+          			</span>
+    			</div>
+  			</div>
+  		</div>
+
+  		<div class="form-group" ng-class="{'has-error':editCompany.state.$invalid && editCompany.state.$dirty}">
+        	<label class="col-md-4 control-label">State</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<input type="text" class="form-control" placeholder="e.g. Maharashtra" name="state" ng-model="selectedCompany.state" required >
+            		<span class="help-block has-error" ng-if="editCompany.state.$dirty">
+            			<span ng-show="editCompany.state.$error.required">State is required.</span>            
+          			</span>
+    			</div>
+  			</div>
+  		</div>
+
+  		<div class="form-group" ng-class="{'has-error':editCompany.city.$invalid && editCompany.city.$dirty}">
+        	<label class="col-md-4 control-label">City</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<input type="text" class="form-control" placeholder="e.g. Pune" name="city" ng-model="selectedCompany.city" required >
+            		<span class="help-block has-error" ng-if="editCompany.city.$dirty">
+            			<span ng-show="editCompany.city.$error.required">City is required.</span>            
+          			</span>
+    			</div>
+  			</div>
+  		</div>
+
+  		<div class="form-group" ng-class="{'has-error':editCompany.pincode.$invalid && editCompany.pincode.$dirty}">
+        	<label class="col-md-4 control-label">Pincode</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<input type="number" class="form-control" placeholder="411058" name="pincode" ng-model="selectedCompany.pincode" required ng-maxlength="6" ng-minlength="6" ng-pattern="/^[0-9]+$/">
+            		<span class="help-block has-error" ng-if="editCompany.pincode.$dirty">
+            			<span ng-show="editCompany.pincode.$error.required">Pincode is required.</span>
+            			<span ng-show="editCompany.pincode.$error.maxlength">The pincode cannot be more than 6 numbers.</span>
+            			<span ng-show="editCompany.pincode.$error.number">Not valid pincode!</span>
+            			<span ng-show="editCompany.pincode.$error.minlength">The pincode cannot be less than 6 numbers.</span>
+            			<span ng-show="editCompany.pincode.$error.pattern">The pincode cannot be negative.</span>
+          			</span>
+    			</div>
+  			</div>
+  		</div>
+
+
+  		<div class="form-group" ng-class="{'has-error':editCompany.phone_no.$invalid && editCompany.phone_no.$dirty}">
+        	<label class="col-md-4 control-label">Phone no.</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<input type="number" class="form-control" placeholder="912448798" name="phone_no" ng-model="selectedCompany.phone_no" required ng-pattern="/^[0-9]+$/">
+            		<span class="help-block has-error" ng-if="editCompany.phone_no.$dirty">
+            			<span ng-show="editCompany.phone_no.$error.required">Phone no. is required.</span>
+            			<span ng-show="editCompany.phone_no.$error.number">Not valid phone no!</span>
+            			<span ng-show="editCompany.phone_no.$error.pattern">The phone no cannot be negative.</span>        
+          			</span>
+    			</div>
+  			</div>
+  		</div>
+
+  		<div class="form-group" ng-class="{'has-error':editCompany.mobile_no.$invalid && editCompany.mobile_no.$dirty}">
+        	<label class="col-md-4 control-label">Mobile no.</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<input type="number" class="form-control" placeholder="9999988888" name="mobile_no" ng-model="selectedCompany.mobile_no" required ng-maxlength="10" ng-minlength="10" ng-pattern="/^[0-9]+$/">
+            		<span class="help-block has-error" ng-if="editCompany.mobile_no.$dirty">
+            			<span ng-show="editCompany.mobile_no.$error.required">Mobile no. is required.</span>
+            			<span ng-show="editCompany.mobile_no.$error.maxlength">The mobile no cannot be more than 10 numbers.</span>
+            			<span ng-show="editCompany.mobile_no.$error.number">Not valid mobile no!</span>
+            			<span ng-show="editCompany.mobile_no.$error.minlength">The mobile no cannot be less than 10 numbers.</span>
+            			<span ng-show="editCompany.mobile_no.$error.pattern">The mobile no cannot be negative.</span>          
+          			</span>
+    			</div>
+  			</div>
+  		</div>
+
+        <div class="form-group" ng-class="{'has-error':editCompany.companyType.$invalid && editCompany.companyType.$dirty}">
+        	<label class="col-md-4 control-label">Company Type</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<input type="text" class="form-control" placeholder="Private or Public etc." name="companyType" ng-model="selectedCompany.companyType" required >
+            		<span class="help-block has-error" ng-if="editCompany.companyType.$dirty">
+            			<span ng-show="editCompany.companyType.$error.required">Company type is required.</span>            
+          			</span>
+    			</div>
+  			</div>          
+        </div>
+
+        <div class="form-group" ng-class="{'has-error':editCompany.industryType.$invalid && editCompany.industryType.$dirty}">
+        	<label class="col-md-4 control-label">Industry Type</label>
+        	<div class="col-md-4 inputGroupContainer">
+        		<div class="input-group">
+        			<input type="text" class="form-control" placeholder="Software or Hardware etc." name="industryType" ng-model="selectedCompany.industryType" required >
+            		<span class="help-block has-error" ng-if="editCompany.industryType.$dirty">
+            			<span ng-show="editCompany.industryType.$error.required">Industry type is required.</span>     
+          			</span>
+    			</div>
+  			</div>          
+        </div>
+
+        <div class="form-group">
+  			<label class="col-md-4 control-label"></label>
+  			<div class="col-md-4">
+  				<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editCompany.$invalid || isCompanyExist || isCompanyWebsiteExist || !isValidWebsite" ng-click="editCompanyDetails(selectedCompany.id)">
+	        		<span ng-hide="companyForm.loading">Update Company <span class="glyphicon glyphicon-send"></span></span>
+	        		<span class="overlord-loading-spinner fa fa-spinner" ng-show="companyForm.loading" > <span class="glyphicon glyphicon-send"></span></span>
+	        		<span ng-show="companyForm.loading">Editing your company...<span class="glyphicon glyphicon-send"></span></span>
+      			</button>
+      			<a href="#/companies" class="btn btn-primary btn-lg btn-block">Back</a>
+  			</div>
+		</div>
+	</form>
+</div>
+</fieldset> 
