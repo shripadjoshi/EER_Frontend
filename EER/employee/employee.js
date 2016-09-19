@@ -11,6 +11,7 @@ angular.module('EERApp.employee', ['ngRoute'])
             return $http.get('http://localhost:1337/employee/' + employeeId);
         },
         updateEmployee: function(employeeId, employeeObj) {
+            console.log(employeeObj)
             return $http.put('http://localhost:1337/employee/' + employeeId, employeeObj)
         },
         updateEmployeeIsDeleted: function(employeeId, isDeletedStatus) {
@@ -274,9 +275,9 @@ angular.module('EERApp.employee', ['ngRoute'])
     $scope.editEmployeeDetails = function(employeeId){
         $scope.employeeForm.loading = true;
         var salutation = "",
-                first_name = "",
-                middle_name = "",
-                last_name = "";
+            first_name = "",
+            middle_name = "",
+            last_name = "";
         if("salutation" in $scope.selectedEmployee){
             salutation = ($scope.selectedEmployee.salutation.length > 0 ? $scope.selectedEmployee.salutation : "" )
         }if("first_name" in $scope.selectedEmployee){
@@ -287,7 +288,7 @@ angular.module('EERApp.employee', ['ngRoute'])
             last_name = ($scope.selectedEmployee.last_name.length > 0 ? $scope.selectedEmployee.last_name : "" )
         }
         $scope.selectedEmployee.full_name = salutation + " "+first_name+" "+middle_name+" "+last_name;
-        var formData = {
+        var formDataEmployee = {
                 salutation: $scope.selectedEmployee.salutation,
                 first_name: $scope.selectedEmployee.first_name,
                 middle_name: $scope.selectedEmployee.middle_name,
@@ -303,12 +304,12 @@ angular.module('EERApp.employee', ['ngRoute'])
                 phone_no: parseInt($scope.selectedEmployee.phone_no),
                 mobile_no: parseInt($scope.selectedEmployee.mobile_no),
                 employee_type: $scope.selectedEmployee.employee_type,
-                employee_company: $scope.selectedEmployee.employee_company,
-                employee_department: $scope.selectedEmployee.employee_department,
-                employee_designation: $scope.selectedEmployee.employee_designation,
+                employee_company: $scope.selectedEmployee.employee_company.id,
+                employee_department: $scope.selectedEmployee.employee_department.id,
+                employee_designation: $scope.selectedEmployee.employee_designation.id,
                 isDeleted: $scope.selectedEmployee.isDeleted
             };        
-        EmployeeDetails.updateEmployee(employeeId, formData)
+        EmployeeDetails.updateEmployee(employeeId, formDataEmployee)
             .success(function(data) {
                 $scope.isMsg = true;
                 $scope.message = ($scope.selectedEmployee.full_name) + " successfully updated";
@@ -325,12 +326,14 @@ angular.module('EERApp.employee', ['ngRoute'])
 			            $scope.allEmployees = allComps;
 			            $scope.allWebsites = allWebs;*/
 			        }).error(function(err) {
+                        console.log("inside error");
 			            $scope.message = "";
 			            $scope.isMsg = false;
 			            $scope.errMessage = err.message;
 			            $scope.isErr = true;
                     })
             }).error(function(err) {
+                console.log("Main error")
                 $scope.message = "";
                 $scope.isMsg = false;
                 $scope.errMessage = err.message;

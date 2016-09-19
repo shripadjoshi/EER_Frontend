@@ -275,7 +275,7 @@
             <button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editEmployee.$invalid || isEmployeeEmailExist" ng-click="editEmployeeDetails(selectedEmployee.id)">
                 <span ng-hide="editEmployeeForm.loading">Update Employee <span class="glyphicon glyphicon-send"></span></span>
                 <span class="overlord-loading-spinner fa fa-spinner" ng-show="editEmployeeForm.loading" > <span class="glyphicon glyphicon-send"></span></span>
-                <span ng-show="editCompanyForm.loading"> Updating employee...<span class="glyphicon glyphicon-send"></span></span>
+                <span ng-show="editEmployeeForm.loading"> Updating employee...<span class="glyphicon glyphicon-send"></span></span>
               </button>
               <a href="#/employees" class="btn btn-primary btn-lg btn-block">Back</a>
           </div>
