@@ -45,6 +45,7 @@ angular.module('EERApp.employee', ['ngRoute'])
     $rootScope.activeTabMaster = "Master";
 
 	$scope.employees = "";
+    $scope.employeesWithUser = "";
     $scope.message = "";
     $scope.errMessage = "";
     $scope.isMsg = false;
@@ -80,11 +81,16 @@ angular.module('EERApp.employee', ['ngRoute'])
             $scope.employees = data;
             var allEmails = [];
             var allEmpIds = [];
+            var allEmpIdsWithUser = [];
             angular.forEach($scope.employees, function(obj) {
                 allEmails.push($filter('toLowerCase')(obj.email_id));
                 allEmpIds.push(obj.emp_id);
+                if(obj.users.length > 0){
+                    allEmpIdsWithUser.push(obj.id)
+                }
             });
             $scope.allEmployeeEmails = allEmails;
+            $scope.employeesWithUser = allEmpIdsWithUser;
             if(allEmpIds.length > 0)
                 $scope.maxEmployeeId = parseInt(Math.max.apply(Math,allEmpIds))+1;
             else
