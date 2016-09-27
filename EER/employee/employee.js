@@ -85,7 +85,7 @@ angular.module('EERApp.employee', ['ngRoute'])
             angular.forEach($scope.employees, function(obj) {
                 allEmails.push($filter('toLowerCase')(obj.email_id));
                 allEmpIds.push(obj.emp_id);
-                if(obj.users.length > 0){
+                if(obj.user.length > 0){
                     allEmpIdsWithUser.push(obj.id)
                 }
             });

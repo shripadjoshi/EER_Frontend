@@ -16,8 +16,8 @@
 		    <tr>
 		      <th>Employee Id</th>
 		      <th>Name</th>
+		      <!-- <th>User Name</th> -->
 		      <th>Email</th>
-		      <!-- <th>User Name</th>-->
 		      <th>Employee type</th>  
 		      <th>Is Deleted?</th>  
 		      <th></th>
@@ -33,8 +33,8 @@
 			<tr ng-repeat="employee in employees" >
 				<td>{{employee.emp_id}}</td>
 				<td>{{employee.full_name}}</td>
-				<td>{{employee.email_id}}</td>
-				<!-- <td>{{employee.user_name}}</td>-->
+				<!-- <td>{{employee.user.user_name}}</td> -->
+				<td>{{employee.email_id}}</td>				
 				<td>{{employee.employee_type}}</td>							
 				<td>
 					<toggle-switch ng-model="employee.isDeleted" on-label="Yes" off-label="No" class="switch-danger" ng-change="toggleEmployeeIsDeleted(employee.id, employee.full_name, employee.isDeleted)">
@@ -43,7 +43,7 @@
 				<td>
 					<a href="javascript:void(0)" class="btn btn-success" data-toggle="modal" data-target="#{{employee.id}}_{{employee.emp_id}}">Other Information</a>
 					<a href="#/employee/edit/{{employee.id}}" class="btn btn-primary">Edit</a>
-					<a href="#/user/new/?employee={{employee.id}}" class="btn btn-primary" ng-disabled="{{employeesWithUser.indexOf(employee.id) > -1 ? 'true' : 'false'}}">Assign User</a>
+					<a href="{{employeesWithUser.indexOf(employee.id) > -1 ? 'javascript:void(0);' : '#/user/new/?employee=employee.id'}}" class="btn btn-primary" ng-disabled="{{employeesWithUser.indexOf(employee.id) > -1 ? 'true' : 'false'}}">Assign User</a>
 					<!--<a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteEmployee(employee.id, employee.full_name)">Delete</a>-->
 				</td>
 			</tr>			

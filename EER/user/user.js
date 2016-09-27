@@ -115,32 +115,46 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
 
 
     $scope.createNewUser = function(){
-        console.log($scope.createUserForm)
-        console.log($scope.selectedEmployee.id)
-        var decrypted = CryptoJS.AES.decrypt($scope.createUserForm.password, "pass");
+        var randomText = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < 5; i++ )
+            randomText += possible.charAt(Math.floor(Math.random() * possible.length));
+        //console.log(randomText);
+
+        //console.log($scope.selectedEmployee.id)
+        var encryptedPassword = CryptoJS.AES.encrypt($scope.createUserForm.password, randomText);
+        //var data = CryptoJS.enc.Utf8.stringify(encrypted);
+        //console.log(encryptedPassword.toString());
+
+        /*var decrypted = CryptoJS.AES.decrypt(encryptedPassword, randomText);
         var data = CryptoJS.enc.Utf8.stringify(decrypted);
-        //console.log(decrypted);  // output : myMessage
-        console.log(data);  // output : myMessage
-    	/*$scope.companyForm.loading = true;
-    	console.log($scope.createCompanyForm)
+        console.log(data);  // output : myMessage  
+*/
+       /* var encrypted = CryptoJS.AES.encrypt($scope.createUserForm.password, "pass");
+        var data = CryptoJS.enc.Utf8.stringify(encrypted);
+        console.log(encrypted);*/
+
+    	$scope.userForm.loading = true;
+        console.log($scope.selectedEmployee)
+        var employeeData = "";
+       // if($scope.selectedEmployee.length > 0){
+            employeeData = $scope.selectedEmployee.id
+        //}else{
+          //  employeeData = $scope.createUserForm.employee
+        //}
+        console.log(employeeData);
     	var formData = {
-    		name: $scope.createCompanyForm.name,
-    		website: $scope.createCompanyForm.website,
-    		address: $scope.createCompanyForm.address,
-    		country: $scope.createCompanyForm.country,
-    		state: $scope.createCompanyForm.state,
-    		city: $scope.createCompanyForm.city,
-    		pincode: parseInt($scope.createCompanyForm.pincode),
-    		phone_no: parseInt($scope.createCompanyForm.phone_no),
-    		mobile_no: parseInt($scope.createCompanyForm.mobile_no),
-    		companyType: $scope.createCompanyForm.companyType,
-    		industryType: $scope.createCompanyForm.industryType
+    		user_name: $scope.createUserForm.user_name,
+    		password: encryptedPassword.toString(),
+    		password_key: randomText.toString(),
+    		employee: employeeData
     	};
-    	CompanyDetails.createNewCompany(formData)
+    	UserDetails.createNewUser(formData)
             .success(function(data) {
                 $scope.isMsg = true;
-                $scope.message = $filter('capitalize')(formData.name) + " company successfully created";
-                $scope.createCompanyForm = "";
+                $scope.message = $filter('capitalize')(formData.user_name) + " user successfully created";
+                $scope.createUserForm = "";
                 $scope.errMessage = "";
                 $scope.isErr = false;
             }).error(function(err) {
@@ -148,7 +162,7 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
                 $scope.isMsg = false;
                 $scope.errMessage = err.message;
                 $scope.isErr = true;
-            });*/
+            });
     },
 
     $scope.deleteCompany = function(companyId, name) {
