@@ -7,6 +7,9 @@ angular.module('EERApp.employee', ['ngRoute'])
         get: function() {
             return $http.get('http://localhost:1337/employee');
         },
+        getUnassignedEmployees: function() {
+            return $http.get('http://localhost:1337/employee/unassigned_employees');
+        },
         getEmployee: function(employeeId) {
             return $http.get('http://localhost:1337/employee/' + employeeId);
         },

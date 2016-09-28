@@ -46,7 +46,8 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
 	$rootScope.activeTab = "User";
     $rootScope.activeTabMaster = "Master";
 
-	$scope.users = "";
+    $scope.users = "";
+	$scope.employees = "";
     $scope.message = "";
     $scope.errMessage = "";
     $scope.isMsg = false;
@@ -68,6 +69,17 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
                 allUsersData.push($filter('toLowerCase')(obj.user_name));
             });
             $scope.allUsers = allUsersData;
+        }).error(function(err) {
+            $scope.message = "";
+            $scope.isMsg = false;
+            $scope.errMessage = err.message;
+            $scope.isErr = true;
+    });
+
+    //This will fetch all the available employees who are not having the users
+    EmployeeDetails.getUnassignedEmployees()
+        .success(function(data) {
+            $scope.employees = data;            
         }).error(function(err) {
             $scope.message = "";
             $scope.isMsg = false;
