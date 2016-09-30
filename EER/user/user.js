@@ -150,11 +150,13 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
     	$scope.userForm.loading = true;
         console.log($scope.selectedEmployee)
         var employeeData = "";
-       // if($scope.selectedEmployee.length > 0){
+        console.log($scope.createUserForm);
+        //obj.hasOwnProperty("key")
+        if($scope.createUserForm.hasOwnProperty("employee")){
+            employeeData = $scope.createUserForm.employee.id
+        }else{
             employeeData = $scope.selectedEmployee.id
-        //}else{
-          //  employeeData = $scope.createUserForm.employee
-        //}
+        }
         console.log(employeeData);
     	var formData = {
     		user_name: $scope.createUserForm.user_name,
