@@ -60,6 +60,7 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
     $scope.selectedUser = "";
     $scope.selectedEmployee = "";
     $scope.updatePassword = false;
+    $scope.currentPasswordMatched = false;
 
     //This will fetch all the available users
     UserDetails.get()
@@ -90,46 +91,121 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
 
     //This will fetch the employee data
     if($location.search().employee){
-        console.log($location.search().employee);
-         EmployeeDetails.getEmployee($location.search().employee)
-            .success(function(employeeData) {
-                $scope.selectedEmployee = employeeData;
-            }).error(function(err) {
-                $scope.message = "";
-                $scope.isMsg = false;
-                $scope.errMessage = err.message;
-                $scope.isErr = true;
-            });
+        EmployeeDetails.getEmployee($location.search().employee)
+        .success(function(employeeData) {
+            $scope.selectedEmployee = employeeData;
+        }).error(function(err) {
+            $scope.message = "";
+            $scope.isMsg = false;
+            $scope.errMessage = err.message;
+            $scope.isErr = true;
+        });
     }
     //This method will be used to fill up the edit form
     if ($routeParams.id != undefined) {
         UserDetails.getUser($routeParams.id)
             .success(function(userData) {
                 $scope.selectedUser = userData;
-                //$scope.isValidWebsite = true;
+                UserDetails.get()
+                    .success(function(data) {
+                        $scope.users = data;
+                        var allUsersData = [];
+                        angular.forEach($scope.users, function(obj) {
+                            allUsersData.push($filter('toLowerCase')(obj.user_name));
+                        });
+                        $scope.allUsers = allUsersData;
+                    }).error(function(err) {
+                        $scope.message = "";
+                        $scope.isMsg = false;
+                        $scope.errMessage = err.message;
+                        $scope.isErr = true;
+                });
+                $scope.isUserExist = true;
             }).error(function(err) {
                 $scope.message = "";
                 $scope.isMsg = false;
                 $scope.errMessage = err.message;
                 $scope.isErr = true;
-                //$scope.isValidWebsite = false;
+                $scope.isUserExist = false;
             });
            
     }
 
-    $scope.toggleUpdatePassword = function(){
+/*    $scope.toggleUpdatePassword = function(){
        //$scope.updatePassword = !$scope.updatePassword;
        //alert($scope.updatePassword);
-    }
+    }*/
 
     $scope.validateUserExist = function(userName){
-		if ($scope.allUsers.indexOf($filter('toLowerCase')(userName)) > -1) {
+        if ($scope.allUsers.indexOf($filter('toLowerCase')(userName)) > -1) {
 	        $scope.isUserExist = true;
 	    } else {
 	        $scope.isUserExist = false;
 	    }
     },
 
+    $scope.checkCurrentPassword = function(){
+        if($scope.hasOwnProperty("passwordForm") && $scope.passwordForm.hasOwnProperty("current_password")){
+            var decrypted = CryptoJS.AES.decrypt($scope.selectedUser.password, $scope.selectedUser.password_key);
+            var data = CryptoJS.enc.Utf8.stringify(decrypted);
+            if($scope.passwordForm.current_password == data){
+                $scope.currentPasswordMatched = true;
+           }else{
+            $scope.currentPasswordMatched = false;
+           }
+        }
+    }
+
+    $scope.editUserDetails = function(userId){
+        $scope.userForm.loading = true;
+        var passwordField = "",
+            passwordKey = "";
+        if($scope.hasOwnProperty("passwordForm") && $scope.passwordForm.hasOwnProperty("current_password")){
+            var randomText = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for( var i=0; i < 5; i++ )
+                randomText += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            var encryptedPassword = CryptoJS.AES.encrypt($scope.passwordForm.password, randomText);
+            passwordField = encryptedPassword.toString();
+            passwordKey = randomText.toString();
+        }else{
+            passwordField = $scope.selectedUser.password;
+            passwordKey = $scope.selectedUser.password_key;
+
+        }
+        var formData = {
+            user_name: $scope.selectedUser.user_name,
+            password: passwordField,
+            password_key: passwordKey
+        };
+        UserDetails.updateUser(userId, formData)
+            .success(function(data) {
+                $scope.isMsg = true;
+                $scope.message = $filter('capitalize')($scope.selectedUser.user_name) + " successfully updated";
+                $scope.userForm.loading = false;                
+                UserDetails.get()
+                    .success(function(data) {
+                        $scope.users = data;
+                        var allUsersData = [];
+                        angular.forEach($scope.users, function(obj) {
+                            allUsersData.push($filter('toLowerCase')(obj.user_name));
+                        });
+                        $scope.allUsers = allUsersData;
+                    }).error(function(err) {
+                        $scope.message = "";
+                        $scope.isMsg = false;
+                        $scope.errMessage = err.message;
+                        $scope.isErr = true;
+                });
+            }).error(function(err) {
+                $scope.message = "";
+                $scope.isMsg = false;
+                $scope.errMessage = err.message;
+                $scope.isErr = true;
+            });
+    }
 
     $scope.createNewUser = function(){
         var randomText = "";
@@ -137,26 +213,13 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
 
         for( var i=0; i < 5; i++ )
             randomText += possible.charAt(Math.floor(Math.random() * possible.length));
-        //console.log(randomText);
-
-        //console.log($scope.selectedEmployee.id)
         var encryptedPassword = CryptoJS.AES.encrypt($scope.createUserForm.password, randomText);
-        //var data = CryptoJS.enc.Utf8.stringify(encrypted);
-        //console.log(encryptedPassword.toString());
 
-        /*var decrypted = CryptoJS.AES.decrypt(encryptedPassword, randomText);
-        var data = CryptoJS.enc.Utf8.stringify(decrypted);
-        console.log(data);  // output : myMessage  
-*/
-       /* var encrypted = CryptoJS.AES.encrypt($scope.createUserForm.password, "pass");
-        var data = CryptoJS.enc.Utf8.stringify(encrypted);
-        console.log(encrypted);*/
 
     	$scope.userForm.loading = true;
         console.log($scope.selectedEmployee)
         var employeeData = "";
         console.log($scope.createUserForm);
-        //obj.hasOwnProperty("key")
         if($scope.createUserForm.hasOwnProperty("employee")){
             employeeData = $scope.createUserForm.employee
         }else{
@@ -210,37 +273,7 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
                 $scope.isErr = true;
             });
 
-    },
-
-    $scope.editCompanyDetails = function(companyId){
-        $scope.companyForm.loading = true;
-        CompanyDetails.updateCompany(companyId, $scope.selectedCompany)
-            .success(function(data) {
-                $scope.isMsg = true;
-                $scope.message = $filter('capitalize')($scope.selectedCompany.name) + " company successfully updated";
-                $scope.companyForm.loading = false;                
-                CompanyDetails.get()
-                    .success(function(data) {
-			            $scope.companies = data;
-			            var allComps = [];
-			            var allWebs = [];
-			            angular.forEach($scope.companies, function(obj) {
-			                allComps.push(obj.name);
-			                allWebs.push(obj.website);
-			            });
-			            $scope.allCompanies = allComps;
-			            $scope.allWebsites = allWebs;
-			        }).error(function(err) {
-			            $scope.message = "";
-			            $scope.isMsg = false;
-			            $scope.errMessage = err.message;
-			            $scope.isErr = true;
-                    })
-            }).error(function(err) {
-                $scope.message = "";
-                $scope.isMsg = false;
-                $scope.errMessage = err.message;
-                $scope.isErr = true;
-            });
     }
+
+    
 }]);

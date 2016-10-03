@@ -16,8 +16,8 @@
     	<label class="col-md-4 control-label">User Name</label>
 			<div class="col-md-4 inputGroupContainer">
 			<div class="input-group">
-				<input type="text" class="form-control" placeholder="User Name" name="user_name" ng-model="selectedUser.user_name" ng-maxlength="10" ng-minlength="4" required ng-blur="validateUserExist(createUserForm.user_name)">
-      	<span class="help-block has-error" ng-if="createUser.user_name.$dirty">
+				<input type="text" class="form-control" placeholder="User Name" name="user_name" ng-model="selectedUser.user_name" ng-maxlength="10" ng-minlength="4" required ng-blur="validateUserExist(selectedUser.user_name)">
+      	<span class="help-block has-error" ng-if="editUser.user_name.$dirty">
           <span ng-show="editUser.user_name.$error.required">User Name is required.</span>
           <span ng-show="editUser.user_name.$error.maxlength">The name cannot be more than 10 characters.</span>
           <span ng-show="editUser.user_name.$error.minlength">The name cannot be less than 4 characters.</span>
@@ -28,37 +28,52 @@
   	</div>
 
     <div class="form-group">
-      <label class="col-md-4 control-label">Want to update password?</label>
+      <label class="col-md-4 control-label"></label>
       <div class="col-md-4 inputGroupContainer">
       <div class="input-group">
-        <input type="checkbox" name="updatePassword" ng-model="updatePassword" ng-change="toggleUpdatePassword()">Update password?
+        <input type="checkbox" name="updatePassword" ng-model="updatePassword">Want to update password?
        </div>
       </div>
     </div>
 
-    <div class="form-group" ng-class="{'has-error':editUser.password.$invalid && editUser.password.$dirty}">
-    	<label class="col-md-4 control-label">Password</label>
-    	<div class="col-md-4 inputGroupContainer">
-    		<div class="input-group">
-    			<input type="password" class="form-control" name="password" ng-model="passwordForm.password" ng-maxlength="10" ng-minlength="6" required>
-        		<span class="help-block has-error" ng-if="editUser.password.$dirty">
+    <div class="form-group" ng-class="{'has-error':editUser.current_password.$invalid && editUser.current_password.$dirty }" ng-show="updatePassword">
+      <label class="col-md-4 control-label" ng-show="updatePassword">Current Password</label>
+      <div class="col-md-4 inputGroupContainer" ng-show="updatePassword">
+        <div class="input-group" ng-show="updatePassword">
+          <input type="password" class="form-control" palceholder="Current password" name="current_password" ng-model="passwordForm.current_password" ng-maxlength="10" ng-minlength="6" ng-required="updatePassword" ng-keyup="checkCurrentPassword()">
+            <span class="help-block has-error" ng-if="editUser.current_password.$dirty && updatePassword">
+              <span ng-show="editUser.current_password.$error.required">Password is required.</span>
+              <span ng-show="editUser.current_password.$error.maxlength">The password cannot be more than 10 characters.</span>
+              <span ng-show="editUser.current_password.$error.minlength">The password cannot be less than 6 characters.</span>
+              <span ng-hide="currentPasswordMatched" class="help-block">The current password not matched.</span>
+            </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error':editUser.password.$invalid && editUser.password.$dirty}" ng-show="updatePassword">
+    	<label class="col-md-4 control-label" ng-show="updatePassword">New Password</label>
+    	<div class="col-md-4 inputGroupContainer" ng-show="updatePassword">
+    		<div class="input-group" ng-show="updatePassword">
+    			<input type="password" class="form-control" palceholder="New password" name="password" ng-model="passwordForm.password" ng-maxlength="10" ng-minlength="6" ng-required="updatePassword">
+        		<span class="help-block has-error" ng-if="editUser.password.$dirty && updatePassword">
               <span ng-show="editUser.password.$error.required">Password is required.</span>
               <span ng-show="editUser.password.$error.maxlength">The password cannot be more than 10 characters.</span>
-              <span ng-show="editUser.password.$error.minlength">The password cannot be less than 4 characters.</span>
+              <span ng-show="editUser.password.$error.minlength">The password cannot be less than 6 characters.</span>
             </span>
 			  </div>
 		  </div>
 	  </div>
 
-    <div class="form-group" ng-class="{'has-error':editUser.confirm_password.$invalid && editUser.confirm_password.$dirty}">
-    	<label class="col-md-4 control-label">Confirm Password</label>
-    	<div class="col-md-4 inputGroupContainer">
-        <div class="input-group">
-          <input type="password" class="form-control" name="confirm_password" ng-model="passwordForm.confirm_password" ng-maxlength="10" ng-minlength="6" match-password="password" required>
-              <span class="help-block has-error" ng-if="editUser.confirm_password.$dirty">
+    <div class="form-group" ng-class="{'has-error':editUser.confirm_password.$invalid && editUser.confirm_password.$dirty}" ng-show="updatePassword">
+    	<label class="col-md-4 control-label" ng-show="updatePassword">Confirm Password</label>
+    	<div class="col-md-4 inputGroupContainer" ng-show="updatePassword">
+        <div class="input-group" ng-show="updatePassword">
+          <input type="password" class="form-control" palceholder="Confirm Password" name="confirm_password" ng-model="passwordForm.confirm_password" ng-maxlength="10" ng-minlength="6" match-password="password" ng-required="updatePassword">
+              <span class="help-block has-error" ng-if="editUser.confirm_password.$dirty && updatePassword">
                 <span ng-show="editUser.confirm_password.$error.required">Password is required.</span>
                 <span ng-show="editUser.confirm_password.$error.maxlength">The password cannot be more than 10 characters.</span>
-                <span ng-show="editUser.confirm_password.$error.minlength">The password cannot be less than 4 characters.</span>
+                <span ng-show="editUser.confirm_password.$error.minlength">The password cannot be less than 6 characters.</span>
                 <span ng-show="editUser.confirm_password.$error.passwordMatch">Your passwords did not match</span>
               </span>
         </div>
@@ -68,7 +83,7 @@
     <div class="form-group">
 		  <label class="col-md-4 control-label"></label>
   		<div class="col-md-4">
-  			<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editUser.$invalid || isUserExist " ng-click="editUser()">
+  			<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editUser.$invalid || isUserExist" ng-click="editUserDetails(selectedUser.id)">
         		<span ng-hide="userForm.loading">Update User <span class="glyphicon glyphicon-send"></span></span>
         		<span class="overlord-loading-spinner fa fa-spinner" ng-show="userForm.loading" > <span class="glyphicon glyphicon-send"></span></span>
         		<span ng-show="userForm.loading">Editing user...<span class="glyphicon glyphicon-send"></span></span>

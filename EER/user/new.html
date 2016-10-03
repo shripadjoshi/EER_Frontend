@@ -62,7 +62,7 @@
                   <span class="help-block has-error" ng-if="createUser.password.$dirty">
                     <span ng-show="createUser.password.$error.required">Password is required.</span>
                     <span ng-show="createUser.password.$error.maxlength">The password cannot be more than 10 characters.</span>
-                    <span ng-show="createUser.password.$error.minlength">The password cannot be less than 4 characters.</span>
+                    <span ng-show="createUser.password.$error.minlength">The password cannot be less than 6 characters.</span>
                   </span>
             </div>
           </div>
@@ -76,7 +76,7 @@
   	            	<span class="help-block has-error" ng-if="createUser.confirm_password.$dirty">
   	            		<span ng-show="createUser.confirm_password.$error.required">Password is required.</span>
                     <span ng-show="createUser.confirm_password.$error.maxlength">The password cannot be more than 10 characters.</span>
-  	            		<span ng-show="createUser.confirm_password.$error.minlength">The password cannot be less than 4 characters.</span>
+  	            		<span ng-show="createUser.confirm_password.$error.minlength">The password cannot be less than 6 characters.</span>
                     <span ng-show="createUser.confirm_password.$error.passwordMatch">Your passwords did not match</span>
   	          		</span>
       			</div>
