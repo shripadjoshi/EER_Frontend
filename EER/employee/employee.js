@@ -272,6 +272,31 @@ angular.module('EERApp.employee', ['ngRoute'])
                 $scope.message = $filter('capitalize')(full_name) + " successfully updated"
                 $scope.errMessage = "";
                 $scope.isErr = false;
+                EmployeeDetails.get()
+                    .success(function(data) {
+                        $scope.employees = data;
+                        var allEmails = [];
+                        var allEmpIds = [];
+                        var allEmpIdsWithUser = [];
+                        angular.forEach($scope.employees, function(obj) {
+                            allEmails.push($filter('toLowerCase')(obj.email_id));
+                            allEmpIds.push(obj.emp_id);
+                            if(obj.user.length > 0){
+                                allEmpIdsWithUser.push(obj.id)
+                            }
+                        });
+                        $scope.allEmployeeEmails = allEmails;
+                        $scope.employeesWithUser = allEmpIdsWithUser;
+                        if(allEmpIds.length > 0)
+                            $scope.maxEmployeeId = parseInt(Math.max.apply(Math,allEmpIds))+1;
+                        else
+                           $scope.maxEmployeeId = 1 
+                    }).error(function(err) {
+                        $scope.message = "";
+                        $scope.isMsg = false;
+                        $scope.errMessage = err.message;
+                        $scope.isErr = true;
+                });
             }).error(function(err) {
                 $scope.message = "";
                 $scope.isMsg = false;

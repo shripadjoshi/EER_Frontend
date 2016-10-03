@@ -19,19 +19,13 @@
 		      <th></th>
 		    </tr>
 	  	</thead>
-	  	<!--<tfoot>
-		    <tr>
-		      <th>Name</th>
-		      <th></th>
-		    </tr>
-	  	</tfoot>-->
 		<tbody>
 			<tr ng-repeat="user in users" >				
 				<td>{{user.employee.full_name}}</td>
 				<td>{{user.user_name }}</td>							
 				<td>
 					<a href="#/user/edit/{{user.id}}" class="btn btn-primary">Edit</a>
-					<a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteCompany(user.id, user.user_name)">Delete</a>
+					<a href="javascript:void(0)" class="btn btn-danger" ng-click="deleteUser(user.id, user.user_name)">Delete</a>
 				</td>
 			</tr>		
 		</tbody>

@@ -59,6 +59,7 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
     $scope.allUsers = "";
     $scope.selectedUser = "";
     $scope.selectedEmployee = "";
+    $scope.updatePassword = false;
 
     //This will fetch all the available users
     UserDetails.get()
@@ -102,7 +103,6 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
     }
     //This method will be used to fill up the edit form
     if ($routeParams.id != undefined) {
-        console.log($routeParams)
         UserDetails.getUser($routeParams.id)
             .success(function(userData) {
                 $scope.selectedUser = userData;
@@ -115,6 +115,11 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
                 //$scope.isValidWebsite = false;
             });
            
+    }
+
+    $scope.toggleUpdatePassword = function(){
+       //$scope.updatePassword = !$scope.updatePassword;
+       //alert($scope.updatePassword);
     }
 
     $scope.validateUserExist = function(userName){
@@ -153,7 +158,7 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
         console.log($scope.createUserForm);
         //obj.hasOwnProperty("key")
         if($scope.createUserForm.hasOwnProperty("employee")){
-            employeeData = $scope.createUserForm.employee.id
+            employeeData = $scope.createUserForm.employee
         }else{
             employeeData = $scope.selectedEmployee.id
         }
@@ -179,20 +184,25 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
             });
     },
 
-    $scope.deleteCompany = function(companyId, name) {
-        CompanyDetails.deleteCompany(companyId)
+    $scope.deleteUser = function(userId, name) {
+        UserDetails.deleteUser(userId)
             .success(function(data) {
-                CompanyDetails.get()
+                UserDetails.get()
                     .success(function(data) {
-                        $scope.companies = data;
-                        $scope.isMsg = true;
-                        $scope.message = $filter('capitalize')(name) + " company successfully deleted";
+                        $scope.users = data;
+                        var allUsersData = [];
+                        angular.forEach($scope.users, function(obj) {
+                            allUsersData.push($filter('toLowerCase')(obj.user_name));
+                        });
+                        $scope.allUsers = allUsersData;
                     }).error(function(err) {
                         $scope.message = "";
                         $scope.isMsg = false;
                         $scope.errMessage = err.message;
                         $scope.isErr = true;
-                    });
+                });
+                $scope.isMsg = true;
+                $scope.message = name + " user successfully deleted";
             }).error(function(data) {
                 $scope.message = "";
                 $scope.isMsg = false;

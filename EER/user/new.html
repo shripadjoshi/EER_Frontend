@@ -25,7 +25,7 @@
           <label class="col-md-4 control-label" ng-hide="selectedEmployee.full_name.length>0">Employee</label>
 
           <div class="col-md-4 inputGroupContainer" ng-hide="selectedEmployee.full_name.length>0">
-            <div class="input-group" ng-hide="selectedEmployee.full_name.length>0">
+            <div class="input-group">
               <select class="form-control" ng-model="createUserForm.employee" ng-options="employee.id as employee.full_name for employee in employees" ng-required="selectedEmployee.full_name.length<=0">
                       <option value="">Select employee</option>
                   </select>
@@ -86,7 +86,7 @@
         <div class="form-group">
     			<label class="col-md-4 control-label"></label>
     			<div class="col-md-4">
-    				<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="createUser.$invalid || isCompanyExist || isUserExist " ng-click="createNewUser()">
+    				<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="createUser.$invalid || isUserExist " ng-click="createNewUser()">
   	        		<span ng-hide="createUserForm.loading">Create User <span class="glyphicon glyphicon-send"></span></span>
   	        		<span class="overlord-loading-spinner fa fa-spinner" ng-show="createUserForm.loading" > <span class="glyphicon glyphicon-send"></span></span>
   	        		<span ng-show="createUserForm.loading">Preparing your new user...<span class="glyphicon glyphicon-send"></span></span>
