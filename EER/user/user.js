@@ -18,7 +18,11 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
         },
         createNewUser: function(userObj) {
             return $http.post('http://localhost:1337/user', userObj)
-        }
+        },
+        checkCurrentPassword: function(userObj) {
+            return $http.post('http://localhost:1337/user/checkUserPass', userObj)
+        },
+
     }
 }])
 
@@ -145,14 +149,29 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
     },
 
     $scope.checkCurrentPassword = function(){
+        
         if($scope.hasOwnProperty("passwordForm") && $scope.passwordForm.hasOwnProperty("current_password")){
-            var decrypted = CryptoJS.AES.decrypt($scope.selectedUser.password, $scope.selectedUser.password_key);
-            var data = CryptoJS.enc.Utf8.stringify(decrypted);
-            if($scope.passwordForm.current_password == data){
-                $scope.currentPasswordMatched = true;
-           }else{
-            $scope.currentPasswordMatched = false;
-           }
+            //var decrypted = CryptoJS.AES.decrypt($scope.selectedUser.password, $scope.selectedUser.password_key);
+            //var data = CryptoJS.enc.Utf8.stringify(decrypted);
+            //console.log("called..........");
+            console.log($scope.passwordForm.current_password)
+            var userObj = {
+                user_name: $scope.selectedUser.user_name,
+                password: $scope.passwordForm.current_password
+            }
+            //console.log(userObj)
+            UserDetails.checkCurrentPassword(userObj)
+            .success(function(data) {
+                //console.log(data);
+                 if(data.message == "Logged In Successfully"){
+                    $scope.currentPasswordMatched = true;
+                }else{
+                    $scope.currentPasswordMatched = false;
+                }
+            }).error(function(err) {
+                //console.log(err);
+            });
+           
         }
     }
 
@@ -208,28 +227,26 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
     }
 
     $scope.createNewUser = function(){
-        var randomText = "";
+        /*var randomText = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
         for( var i=0; i < 5; i++ )
             randomText += possible.charAt(Math.floor(Math.random() * possible.length));
-        var encryptedPassword = CryptoJS.AES.encrypt($scope.createUserForm.password, randomText);
+        var encryptedPassword = CryptoJS.AES.encrypt($scope.createUserForm.password, randomText);*/
 
 
     	$scope.userForm.loading = true;
-        console.log($scope.selectedEmployee)
         var employeeData = "";
-        console.log($scope.createUserForm);
+        //console.log($scope.createUserForm);
         if($scope.createUserForm.hasOwnProperty("employee")){
             employeeData = $scope.createUserForm.employee
         }else{
             employeeData = $scope.selectedEmployee.id
         }
-        console.log(employeeData);
+        //console.log(employeeData);
     	var formData = {
     		user_name: $scope.createUserForm.user_name,
-    		password: encryptedPassword.toString(),
-    		password_key: randomText.toString(),
+    		password: $scope.createUserForm.password,
     		employee: employeeData
     	};
     	UserDetails.createNewUser(formData)
