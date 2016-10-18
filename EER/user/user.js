@@ -135,11 +135,6 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
            
     }
 
-/*    $scope.toggleUpdatePassword = function(){
-       //$scope.updatePassword = !$scope.updatePassword;
-       //alert($scope.updatePassword);
-    }*/
-
     $scope.validateUserExist = function(userName){
         if ($scope.allUsers.indexOf($filter('toLowerCase')(userName)) > -1) {
 	        $scope.isUserExist = true;
@@ -151,25 +146,19 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
     $scope.checkCurrentPassword = function(){
         
         if($scope.hasOwnProperty("passwordForm") && $scope.passwordForm.hasOwnProperty("current_password")){
-            //var decrypted = CryptoJS.AES.decrypt($scope.selectedUser.password, $scope.selectedUser.password_key);
-            //var data = CryptoJS.enc.Utf8.stringify(decrypted);
-            //console.log("called..........");
-            console.log($scope.passwordForm.current_password)
             var userObj = {
                 user_name: $scope.selectedUser.user_name,
                 password: $scope.passwordForm.current_password
             }
-            //console.log(userObj)
             UserDetails.checkCurrentPassword(userObj)
             .success(function(data) {
-                //console.log(data);
                  if(data.message == "Logged In Successfully"){
                     $scope.currentPasswordMatched = true;
                 }else{
                     $scope.currentPasswordMatched = false;
                 }
             }).error(function(err) {
-                //console.log(err);
+                $scope.currentPasswordMatched = false;
             });
            
         }
@@ -177,27 +166,15 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
 
     $scope.editUserDetails = function(userId){
         $scope.userForm.loading = true;
-        var passwordField = "",
-            passwordKey = "";
+        var passwordField = "";        
         if($scope.hasOwnProperty("passwordForm") && $scope.passwordForm.hasOwnProperty("current_password")){
-            var randomText = "";
-            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-            for( var i=0; i < 5; i++ )
-                randomText += possible.charAt(Math.floor(Math.random() * possible.length));
-
-            var encryptedPassword = CryptoJS.AES.encrypt($scope.passwordForm.password, randomText);
-            passwordField = encryptedPassword.toString();
-            passwordKey = randomText.toString();
+            passwordField = $scope.passwordForm.password;
         }else{
             passwordField = $scope.selectedUser.password;
-            passwordKey = $scope.selectedUser.password_key;
-
         }
         var formData = {
             user_name: $scope.selectedUser.user_name,
-            password: passwordField,
-            password_key: passwordKey
+            password: passwordField
         };
         UserDetails.updateUser(userId, formData)
             .success(function(data) {
@@ -227,24 +204,14 @@ angular.module('EERApp.user', ['ngRoute','ngPassword'])
     }
 
     $scope.createNewUser = function(){
-        /*var randomText = "";
-        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-        for( var i=0; i < 5; i++ )
-            randomText += possible.charAt(Math.floor(Math.random() * possible.length));
-        var encryptedPassword = CryptoJS.AES.encrypt($scope.createUserForm.password, randomText);*/
-
-
-    	$scope.userForm.loading = true;
+        $scope.userForm.loading = true;
         var employeeData = "";
-        //console.log($scope.createUserForm);
         if($scope.createUserForm.hasOwnProperty("employee")){
             employeeData = $scope.createUserForm.employee
         }else{
             employeeData = $scope.selectedEmployee.id
         }
-        //console.log(employeeData);
-    	var formData = {
+        var formData = {
     		user_name: $scope.createUserForm.user_name,
     		password: $scope.createUserForm.password,
     		employee: employeeData

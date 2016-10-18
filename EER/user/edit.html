@@ -12,17 +12,17 @@
   <form id="edit-user-form" class= "well form-horizontal" name="editUser">
     <legend>Edit User</legend>
         
-    <div class="form-group" ng-class="{'has-error':editUser.user_name.$invalid && editUser.user_name.$dirty}">
+    <div class="form-group">
     	<label class="col-md-4 control-label">User Name</label>
 			<div class="col-md-4 inputGroupContainer">
 			<div class="input-group">
-				<input type="text" class="form-control" placeholder="User Name" name="user_name" ng-model="selectedUser.user_name" ng-maxlength="10" ng-minlength="4" required ng-blur="validateUserExist(selectedUser.user_name)">
-      	<span class="help-block has-error" ng-if="editUser.user_name.$dirty">
+				<input type="text" class="form-control" placeholder="User Name" name="user_name" ng-model="selectedUser.user_name" ng-maxlength="10" ng-minlength="4" required ng-disabled=true>
+      	<!-- <span class="help-block has-error" ng-if="editUser.user_name.$dirty">
           <span ng-show="editUser.user_name.$error.required">User Name is required.</span>
           <span ng-show="editUser.user_name.$error.maxlength">The name cannot be more than 10 characters.</span>
           <span ng-show="editUser.user_name.$error.minlength">The name cannot be less than 4 characters.</span>
           <span ng-show="isUserExist" class="help-block">User name is already taken.</span>
-        </span>
+        </span> -->
 			 </div>
 		  </div>
   	</div>
@@ -83,7 +83,7 @@
     <div class="form-group">
 		  <label class="col-md-4 control-label"></label>
   		<div class="col-md-4">
-  			<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editUser.$invalid || isUserExist" ng-click="editUserDetails(selectedUser.id)">
+  			<button class="btn btn-primary btn-lg btn-block" type="submit" ng-disabled="editUser.$invalid" ng-click="editUserDetails(selectedUser.id)">
         		<span ng-hide="userForm.loading">Update User <span class="glyphicon glyphicon-send"></span></span>
         		<span class="overlord-loading-spinner fa fa-spinner" ng-show="userForm.loading" > <span class="glyphicon glyphicon-send"></span></span>
         		<span ng-show="userForm.loading">Editing user...<span class="glyphicon glyphicon-send"></span></span>
